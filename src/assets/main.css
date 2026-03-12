@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "PolySans Bulky";
+  src: url("./fonts/polysanstrial-bulky.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f5f5f5;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #f9f9f9;
+  --text-primary:  #000000;
+  --text-secondary:#333333;
+  --text-muted:    #0F3775;
+  --accent:        #0F3775;
+  --accent-hover:  #0a2a5a;
+  --accent-rgb:    15, 55, 117;
+  --border:        rgba(15, 55, 117, 0.12);
+  --shadow:        rgba(15, 55, 117, 0.10);
+  --nav-bg:        rgba(255,255,255,0.85);
+  --input-bg:      rgba(0,0,0,0.04);
+  --input-border:  rgba(0,0,0,0.08);
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     20px;
+}
+
+.dark {
+  --bg-primary:    #0a0a0a;
+  --bg-secondary:  rgba(255,255,255,0.02);
+  --bg-card:       rgba(255,255,255,0.04);
+  --bg-card-hover: rgba(255,255,255,0.08);
+  --text-primary:  #ffffff;
+  --text-secondary:#e0e0e0;
+  --text-muted:    #a0a0a0;
+  --accent:        #289DF2;
+  --accent-hover:  #1e7fc7;
+  --accent-rgb:    40, 157, 242;
+  --border:        rgba(255,255,255,0.08);
+  --shadow:        rgba(40,157,242,0.15);
+  --nav-bg:        rgba(10,10,10,0.80);
+  --input-bg:      rgba(255,255,255,0.05);
+  --input-border:  rgba(255,255,255,0.08);
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(var(--accent-rgb), 0.3); border-radius: 10px; }
+::selection { background: rgba(var(--accent-rgb), 0.2); }
+
+.highlight { color: var(--accent); }
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.fade-enter-active, .fade-leave-active { transition: opacity 0.6s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
