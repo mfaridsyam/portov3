@@ -1,87 +1,43 @@
 <template>
   <section id="contact" class="contact">
-    <div class="contact-container">
-      <!-- Header -->
-      <div class="section-header reveal">
-        <p class="eyebrow">Get In Touch</p>
-        <h2>Contact <span class="highlight">Me</span></h2>
-        <div class="header-line"></div>
-      </div>
+    <div class="contact-inner">
+      <p class="section-tag reveal-up">GET IN TOUCH</p>
+      <h2 class="reveal-up" style="transition-delay:.08s">Let's Work Together</h2>
+      <p class="contact-sub reveal-up" style="transition-delay:.16s">
+        Open for freelance projects, collaborations, or a friendly chat about design and code.
+      </p>
 
       <div class="contact-grid">
-        <!-- Left: info + lottie -->
-        <div class="contact-left reveal">
+        <div class="contact-lottie reveal-up" style="transition-delay:.2s">
           <div id="lottie-contact"></div>
-          <div class="contact-info">
-            <h3>Let's Work Together</h3>
-            <p>Open for freelance projects, collaborations, or just a friendly chat about design and code.</p>
-            <div class="contact-badges">
-              <span class="cbadge"><i class="fas fa-paint-brush"></i> UI/UX Design</span>
-              <span class="cbadge"><i class="fas fa-code"></i> Frontend Dev</span>
-            </div>
+          <div class="contact-badges">
+            <span><i class="fas fa-paint-brush"></i> UI/UX Design</span>
+            <span><i class="fas fa-code"></i> Frontend Dev</span>
           </div>
         </div>
 
-        <!-- Right: form -->
-        <div class="contact-form-wrap reveal" style="transition-delay:0.1s">
-          <div class="form-card">
-            <h3>Send a Message</h3>
-            <p class="form-sub">Have something to discuss? I'd love to hear from you.</p>
-
-            <form @submit.prevent="sendMessage" novalidate>
-              <!-- Honeypot -->
-              <input type="text" name="website" id="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" />
-
-              <div class="field-group">
-                <input
-                  v-model="form.name"
-                  type="text"
-                  placeholder="Your Name"
-                  required
-                  :disabled="sending"
-                />
-              </div>
-              <div class="field-group">
-                <input
-                  v-model="form.email"
-                  type="email"
-                  placeholder="Your Email"
-                  required
-                  :disabled="sending"
-                />
-              </div>
-              <div class="field-group">
-                <textarea
-                  v-model="form.message"
-                  placeholder="Your Message"
-                  rows="5"
-                  required
-                  :disabled="sending"
-                ></textarea>
-              </div>
-
-              <button type="submit" class="btn-submit" :disabled="sending">
-                <i :class="sending ? 'fas fa-spinner fa-spin' : 'fas fa-paper-plane'"></i>
-                {{ sending ? 'Sending…' : 'Send Message' }}
-              </button>
-            </form>
-          </div>
-        </div>
+        <form class="contact-form reveal-up" style="transition-delay:.28s" @submit.prevent="sendMessage" novalidate>
+          <input type="text" name="website" id="hp" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" />
+          <div class="field"><input v-model="form.name" type="text" placeholder="Your Name" required :disabled="sending" /></div>
+          <div class="field"><input v-model="form.email" type="email" placeholder="Your Email" required :disabled="sending" /></div>
+          <div class="field"><textarea v-model="form.message" placeholder="Your Message" rows="5" required :disabled="sending"></textarea></div>
+          <button type="submit" :disabled="sending">
+            <i :class="sending ? 'fas fa-spinner fa-spin' : 'fas fa-paper-plane'"></i>
+            {{ sending ? 'Sending…' : 'Send Message' }}
+          </button>
+        </form>
       </div>
     </div>
 
-    <!-- Notification -->
     <Teleport to="body">
       <Transition name="notif">
         <div v-if="notif.show" class="notif" :class="notif.type">
-          <div class="notif-icon">
-            <i :class="notif.type === 'success' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
-          </div>
-          <div class="notif-msg">
+          <i :class="notif.type === 'success' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+          <div>
             <strong>{{ notif.title }}</strong>
             <p>{{ notif.text }}</p>
           </div>
-          <button class="notif-close" @click="notif.show = false"><i class="fas fa-times"></i></button>
+          <button @click="notif.show = false"><i class="fas fa-times"></i></button>
         </div>
       </Transition>
     </Teleport>
@@ -93,9 +49,9 @@ import { ref, reactive, onMounted } from 'vue'
 import emailjs from '@emailjs/browser'
 import lottie from 'lottie-web'
 
-const form = reactive({ name: '', email: '', message: '' })
+const form    = reactive({ name: '', email: '', message: '' })
 const sending = ref(false)
-const notif = reactive({ show: false, type: 'success', title: '', text: '' })
+const notif   = reactive({ show: false, type: 'success', title: '', text: '' })
 
 function showNotif(type, title, text) {
   Object.assign(notif, { show: true, type, title, text })
@@ -105,30 +61,22 @@ function showNotif(type, title, text) {
 async function sendMessage() {
   if (document.getElementById('hp')?.value) return
   if (!form.name || !form.email || !form.message) return
-
   sending.value = true
   try {
     await emailjs.send('service_qg8j9nh', 'template_j9ivxnn', {
-      from_name: form.name,
-      reply_to:  form.email,
-      message:   form.message
+      from_name: form.name, reply_to: form.email, message: form.message
     }, 'UrpG9fqigxq0B2m7k')
-
-    showNotif('success', 'Message Sent!', 'Thank you — I\'ll get back to you soon.')
+    showNotif('success', 'Message Sent!', "Thank you — I'll get back to you soon.")
     Object.assign(form, { name: '', email: '', message: '' })
   } catch {
     showNotif('error', 'Oops!', 'Something went wrong. Please try again.')
-  } finally {
-    sending.value = false
-  }
+  } finally { sending.value = false }
 }
 
 onMounted(() => {
   lottie.loadAnimation({
     container: document.getElementById('lottie-contact'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
+    renderer: 'svg', loop: true, autoplay: true,
     path: 'https://res.cloudinary.com/dnacoymkh/raw/upload/v1772692529/email_adxthp.json'
   })
 })
@@ -136,110 +84,102 @@ onMounted(() => {
 
 <style scoped>
 .contact {
-  padding: 9rem 8%;
-  background: var(--bg-primary);
-  position: relative;
+  padding: 8rem 6%;
+  background: var(--bg-secondary);
 }
-
-.contact-container { max-width: 1100px; margin: 0 auto; }
-
-.section-header { text-align: center; margin-bottom: 5rem; }
-.eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
-h2 { font-family: "PolySans Bulky", sans-serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: var(--text-primary); margin-bottom: 1rem; }
-.header-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto; border-radius: 2px; }
-
+.contact-inner { max-width: 1000px; margin: 0 auto; }
+.section-tag {
+  font-size: 0.6rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+h2 {
+  font-family: "PolySans Bulky", sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+}
+.contact-sub {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 4rem;
+}
 .contact-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 5rem;
-  align-items: center;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 4rem;
+  align-items: start;
 }
-
-.contact-left { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.8rem; }
-#lottie-contact { width: 100%; max-width: 260px; height: 240px; }
-
-.contact-info h3 { font-family: "PolySans Bulky", sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.6rem; }
-.contact-info p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.2rem; }
+.contact-lottie { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+#lottie-contact { width: 100%; max-width: 240px; height: 220px; }
 .contact-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
-.cbadge {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  padding: 0.4rem 0.9rem;
-  background: rgba(var(--accent-rgb),0.08);
-  border: 1px solid rgba(var(--accent-rgb),0.25);
-  border-radius: 50px; font-size: 0.78rem; font-weight: 600; color: var(--accent);
+.contact-badges span {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  border-radius: 50px;
+  color: var(--accent);
+  display: flex; align-items: center; gap: 0.4rem;
 }
 
-.form-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-}
-.form-card h3 { font-size: 1.4rem; font-weight: 700; color: var(--accent); margin-bottom: 0.4rem; }
-.form-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.8rem; }
-
-.field-group { margin-bottom: 1.2rem; }
-input, textarea {
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.field input, .field textarea {
   width: 100%;
-  padding: 0.85rem 1.1rem;
+  padding: 0.9rem 1.1rem;
   background: var(--input-bg);
   border: 1px solid var(--input-border);
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   color: var(--text-primary);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-family: inherit;
-  transition: border-color 0.3s, background 0.3s;
   outline: none;
+  transition: border-color 0.3s;
 }
-input:focus, textarea:focus {
-  border-color: var(--accent);
-  background: var(--bg-card-hover);
-}
-input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 0.6; }
-textarea { resize: vertical; min-height: 130px; }
-input:disabled, textarea:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.btn-submit {
-  width: 100%;
+.field input:focus, .field textarea:focus { border-color: var(--accent); }
+.field input::placeholder, .field textarea::placeholder { color: var(--text-muted); opacity: 0.6; }
+.field textarea { resize: vertical; min-height: 130px; }
+button[type=submit] {
   padding: 0.9rem;
   background: var(--accent); color: #fff;
-  border: none; border-radius: var(--radius-sm);
-  font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  border: none; border-radius: 10px;
+  font-size: 0.9rem; font-weight: 600;
+  cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 0.5rem;
   transition: all 0.3s;
 }
-.btn-submit:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 18px var(--shadow); }
-.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+button[type=submit]:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); }
+button[type=submit]:disabled { opacity: 0.6; cursor: not-allowed; }
 
+/* notification */
 .notif {
-  position: fixed;
-  bottom: 2rem; right: 2rem;
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 1.2rem 1.5rem;
-  display: flex; align-items: center; gap: 1rem;
-  max-width: 360px;
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  max-width: 340px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-  z-index: 9999;
 }
 .notif.success { border-left: 3px solid var(--accent); }
 .notif.error   { border-left: 3px solid #ff4d4d; }
-.notif-icon i { font-size: 1.6rem; }
-.notif.success .notif-icon i { color: var(--accent); }
-.notif.error   .notif-icon i { color: #ff4d4d; }
-.notif-msg strong { display: block; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.2rem; }
-.notif-msg p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
-.notif-close { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; margin-left: auto; padding: 2px; transition: color 0.2s; }
-.notif-close:hover { color: var(--text-primary); }
+.notif i:first-child { font-size: 1.3rem; margin-top: 2px; }
+.notif.success i:first-child { color: var(--accent); }
+.notif.error   i:first-child { color: #ff4d4d; }
+.notif strong { display: block; font-size: 0.9rem; color: var(--text-primary); margin-bottom: 0.2rem; }
+.notif p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+.notif button { background: none; border: none; cursor: pointer; color: var(--text-muted); margin-left: auto; font-size: 0.85rem; }
 
-.notif-enter-active, .notif-leave-active { transition: all 0.35s ease; }
-.notif-enter-from { opacity: 0; transform: translateX(30px); }
-.notif-leave-to   { opacity: 0; transform: translateX(30px); }
+.notif-enter-active, .notif-leave-active { transition: all 0.3s ease; }
+.notif-enter-from, .notif-leave-to { opacity: 0; transform: translateX(20px); }
 
-@media (max-width: 900px) {
-  .contact { padding: 6rem 6%; }
-  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .contact-left { order: -1; }
+@media (max-width: 700px) {
+  .contact-grid { grid-template-columns: 1fr; }
 }
 </style>
