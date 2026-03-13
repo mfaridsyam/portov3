@@ -55,7 +55,7 @@
             <div class="ilines">
               <div class="il">Let Me Introduce</div>
               <div class="il">My Self</div>
-              <div class="il il-role">As <span class="role-wrap"><Transition name="role-fade"><em :key="displayRole">{{ displayRole }}</em></Transition></span></div>
+              <div class="il il-role">As <span class="role-wrap"><span v-for="(ch, ci) in padded" :key="ci" class="role-ch" :class="{settled: ch.settled, inactive: !ch.active}">{{ ch.display }}</span></span></div>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
               <div class="ab-txt">
                 <span class="ab-tag">WHO I AM</span>
                 <h2 class="ab-name"><span class="ab-fn">Muhammad</span><span class="ab-ln">Farid Syam</span></h2>
-                <p class="ab-bio">I'm a <strong>UI/UX Designer</strong> and <strong>Frontend Developer</strong> based in Makassar, Indonesia. I specialize in crafting digital interfaces that feel alive — intuitive journeys built with Figma and Vue.js.</p>
+                <p class="ab-bio">I'm a <strong>UI/UX Designer</strong> and <strong>Frontend Developer</strong> based in West Sulawesi, Indonesia. I'm a tech-savvy designer who loves building things for the web. With a solid foundation in Informatics Engineering, I spend my time mastering Figma and JavaScript. Currently, I'm diving deeper into the Vue.js ecosystem to build even better user experiences.</p>
                 <blockquote>"Design with soul, develop with logic."</blockquote>
                 <div class="ab-stats">
                   <div class="ast"><span class="astn">11+</span><span class="astl">Projects</span></div>
@@ -185,17 +185,8 @@
                   <h3 class="scolh">Education</h3>
                   <div class="sitems">
                     <div class="sitem">
-                      <div class="simt">Informatics Engineering (Bachelor)</div>
-                      <div class="simd"><span>Universitas Mikroskil</span><span class="sdot">·</span><span>3.69/4.00</span></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="scol">
-                  <h3 class="scolh">Experiences</h3>
-                  <div class="sitems">
-                    <div v-for="e in experiences" :key="e.name" class="sitem">
-                      <div class="simt">{{ e.name }}</div>
-                      <div class="simd"><span>{{ e.role }}</span><span class="sdot">·</span><span>{{ e.period }}</span></div>
+                      <div class="simt">Informatics Engineering</div>
+                      <div class="simd"><span>Universitas Al Asyariah Mandar</span><span class="sdot">·</span><span>3.53/4.00</span></div>
                     </div>
                   </div>
                 </div>
@@ -415,11 +406,79 @@ function onMouse(e) {
 
 const roles = ['UI/UX Designer', 'Frontend Developer']
 const roleIdx = ref(0)
-const displayRole = ref(roles[0])
 let roleTimer = null
+
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+function rndChar() { return CHARS[Math.floor(Math.random() * CHARS.length)] }
+
+const longestRole = roles.reduce((a, b) => a.length > b.length ? a : b)
+
+const scrambledChars = ref(
+  roles[0].split('').map(ch => ({ display: ch === ' ' ? '\u00A0' : ch, settled: true, visible: true }))
+)
+
+const padded = ref(
+  Array.from({ length: longestRole.length }, (_, i) => ({
+    display: i < roles[0].length ? (roles[0][i] === ' ' ? '\u00A0' : roles[0][i]) : '\u00A0',
+    settled: true,
+    active: i < roles[0].length
+  }))
+)
+
+let scrambleId = 0
+function scrambleTo(target) {
+  const id = ++scrambleId
+  const targetArr = target.split('')
+
+  padded.value = padded.value.map((_, i) => ({
+    display: i < padded.value.length ? padded.value[i].display : '\u00A0',
+    settled: false,
+    active: i < targetArr.length
+  }))
+
+  for (let i = 0; i < longestRole.length; i++) {
+    const targetChar = i < targetArr.length ? targetArr[i] : null
+    const delay = i * 55
+    const duration = 280
+    const t0 = performance.now()
+
+    ;(function animChar(idx) {
+      function tick(now) {
+        if (scrambleId !== id) return
+        const elapsed = now - t0
+        if (elapsed < delay) { requestAnimationFrame(tick); return }
+        const progress = elapsed - delay
+        if (progress < duration) {
+          if (padded.value[idx] && targetChar !== null) {
+            padded.value[idx].display = rndChar()
+            padded.value[idx].active = true
+          } else if (padded.value[idx]) {
+            padded.value[idx].display = '\u00A0'
+            padded.value[idx].active = false
+          }
+          requestAnimationFrame(tick)
+        } else {
+          if (padded.value[idx]) {
+            if (targetChar !== null) {
+              padded.value[idx].display = targetChar === ' ' ? '\u00A0' : targetChar
+              padded.value[idx].settled = true
+              padded.value[idx].active = true
+            } else {
+              padded.value[idx].display = '\u00A0'
+              padded.value[idx].settled = true
+              padded.value[idx].active = false
+            }
+          }
+        }
+      }
+      requestAnimationFrame(tick)
+    })(i)
+  }
+}
+
 function cycleRole() {
-  roleIdx.value = (roleIdx.value+1) % roles.length
-  displayRole.value = roles[roleIdx.value]
+  roleIdx.value = (roleIdx.value + 1) % roles.length
+  scrambleTo(roles[roleIdx.value])
 }
 
 const aud = ref(null)
@@ -561,15 +620,13 @@ body{cursor:none}
 .il{font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;color:var(--tx);line-height:1.1;white-space:nowrap}
 @media(max-width:600px){.il{white-space:normal;font-size:clamp(1.9rem,8.5vw,3.5rem)}}
 .il-role{display:flex;align-items:baseline;gap:.22em;white-space:nowrap}
-@media(max-width:600px){.il-role{white-space:nowrap;flex-wrap:nowrap;overflow:hidden}}
-.role-wrap{position:relative;display:inline-block;min-width:5.5em}
-@media(max-width:600px){.role-wrap{min-width:0;max-width:calc(100vw - 7rem)}}
-.role-wrap em{font-style:italic;color:var(--acc);display:inline-block;white-space:nowrap;font-size:clamp(1.9rem,8.5vw,3.5rem)}
-@media(min-width:601px){.role-wrap em{font-size:clamp(2rem,6.5vw,6.5rem)}}
-.role-fade-enter-active{transition:opacity .5s ease,transform .5s cubic-bezier(.16,1,.3,1)}
-.role-fade-leave-active{transition:opacity .4s ease,transform .4s ease;position:absolute;left:0;top:0}
-.role-fade-enter-from{opacity:0;transform:translateY(12px)}
-.role-fade-leave-to{opacity:0;transform:translateY(-10px)}
+@media(max-width:600px){.il-role{white-space:nowrap;overflow:hidden}}
+.role-wrap{display:inline-block;font-style:italic;font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;line-height:1.1;white-space:nowrap;overflow:hidden}
+@media(max-width:600px){.role-wrap{font-size:clamp(1.6rem,7.5vw,3rem)}}
+.role-ch{display:inline-block;color:var(--acc);font-style:italic;transition:color .1s ease}
+.role-ch.settled{color:var(--acc)}
+.role-ch:not(.settled).active{color:rgba(40,157,242,.4)}
+.role-ch.inactive{color:transparent;pointer-events:none}
 
 .sec-about{height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative}
 .ab-marq{overflow:hidden;position:absolute;bottom:0;left:0;right:0;padding:.5rem 0;z-index:1;pointer-events:none}
@@ -665,11 +722,13 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .sec-summary .sl-inner{padding-top:5rem;padding-bottom:3rem}
 .sum-hd{margin-bottom:2.5rem}
 .sum-lbl{font-size:clamp(1.1rem,2vw,1.6rem);font-weight:700;color:var(--tx);text-decoration:underline;text-underline-offset:5px;margin-bottom:.9rem;display:block;font-family:var(--san)}
-.sum-name{font-family:var(--san);font-size:clamp(2.5rem,7vw,6rem);font-weight:800;color:var(--tx);letter-spacing:-.04em;line-height:.95;margin-bottom:.5rem;word-break:keep-all;overflow-wrap:normal}
-@media(max-width:700px){.sum-name{font-size:clamp(2.2rem,9vw,4rem);line-height:1}}
+.sum-name{font-family:var(--san);font-size:clamp(2.2rem,5.5vw,5.5rem);font-weight:800;color:var(--tx);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;white-space:nowrap}
+@media(max-width:900px){.sum-name{font-size:clamp(2rem,6vw,4rem);white-space:normal;line-height:.95}}
+@media(max-width:700px){.sum-name{font-size:clamp(1.9rem,8vw,3.2rem);line-height:1;white-space:normal}}
 .sum-role{font-size:.82rem;color:var(--txd);margin-bottom:.9rem}
 .sum-bio{font-size:clamp(.85rem,1.2vw,.92rem);line-height:1.78;color:var(--txd);max-width:560px}
-.sum-cols{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem 4rem;border-top:1px solid var(--bdr);padding-top:2.5rem;margin-top:2.5rem}
+.sum-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem 3rem;border-top:1px solid var(--bdr);padding-top:2.5rem;margin-top:2.5rem}
+@media(max-width:900px){.sum-cols{grid-template-columns:1fr 1fr;gap:2rem 2.5rem}}
 @media(max-width:700px){.sum-cols{grid-template-columns:1fr;gap:2rem}}
 .scolh{font-family:var(--ser);font-size:1rem;font-weight:400;color:var(--tx);margin-bottom:.85rem;padding-bottom:.45rem;border-bottom:1px solid var(--bdr)}
 .sitems{display:flex;flex-direction:column;gap:.75rem}
@@ -683,9 +742,9 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .slink:hover{padding-left:.3rem}
 .slink:hover .simt{color:var(--acc)}
 
-.sec-contact{height:100%;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.ct-inner{padding:5rem 5% 3rem;max-width:780px;margin:0 auto;width:100%}
-.cthd{margin-bottom:2.5rem;text-align:center}
+.sec-contact{height:100%;display:flex;align-items:center;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ct-inner{padding:2rem 5%;max-width:680px;margin:0 auto;width:100%}
+.cthd{margin-bottom:2rem;text-align:center}
 .ctag{font-size:.52rem;letter-spacing:6px;text-transform:uppercase;color:var(--acc);display:block;margin-bottom:.7rem}
 .cttitle{font-family:var(--ser);font-size:clamp(2rem,5vw,4.5rem);font-weight:400;color:var(--tx);letter-spacing:-3px;line-height:1.04;margin:.65rem 0 .9rem}
 .cttitle em{font-style:italic;color:var(--acc)}
