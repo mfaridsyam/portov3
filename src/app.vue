@@ -46,7 +46,7 @@
     <!-- ═══ SECTION 2: INTRO "Let Me Introduce My Self As [Role]" ═══ -->
     <section class="s-intro">
       <div class="intro-pin">
-        <div class="intro-wrap" :style="{ opacity: introOp, transform:'translateY('+introY+'px)' }">
+        <div class="intro-wrap" :style="{ opacity: introOp }">
           <div class="iline" :style="{ transform:'translateX('+iOff[0]+'px)', filter:'blur('+iBlur+'px)' }">
             <span class="itext">Let Me Introduce</span>
           </div>
@@ -56,15 +56,9 @@
           <div class="iline role-line" :style="{ transform:'translateX('+iOff[2]+'px)', filter:'blur('+iBlur+'px)' }">
             <span class="itext">As&nbsp;</span>
             <span class="role-slot">
-              <Transition name="role-swap">
-                <span class="role-word" :key="roleIdx">{{ currentRole }}</span>
-              </Transition>
+              <span class="role-word" :class="{ 'role-visible': roleVisible }">{{ displayRole }}</span>
             </span>
           </div>
-        </div>
-        <div class="cue" :style="{ opacity: introCue }">
-          <div class="cue-m"><div class="cue-d"></div></div>
-          <span>SCROLL DOWN</span>
         </div>
       </div>
     </section>
@@ -331,8 +325,18 @@ let loadInterval = null
 // Roles cycling
 const roles = ['UI/UX Designer', 'Frontend Developer']
 const roleIdx = ref(0)
-const currentRole = computed(() => roles[roleIdx.value])
+const displayRole = ref(roles[0])
+const roleVisible = ref(true)
 let roleTimer = null
+
+function cycleRole() {
+  roleVisible.value = false
+  setTimeout(() => {
+    roleIdx.value = (roleIdx.value + 1) % roles.length
+    displayRole.value = roles[roleIdx.value]
+    roleVisible.value = true
+  }, 400)
+}
 
 // Bio & Quote word-reveal
 const BIO = `I'm a tech-savvy designer who loves building things for the web. With a solid foundation in Informatics Engineering, I spend my time mastering Figma and JavaScript. Currently, I'm diving deeper into the Vue.js ecosystem to build even better user experiences.`
@@ -355,7 +359,7 @@ onMounted(async () => {
           phase.value = 'site'
           await nextTick()
           initObservers()
-          roleTimer = setInterval(() => { roleIdx.value = (roleIdx.value+1) % roles.length }, 2600)
+          roleTimer = setInterval(cycleRole, 2600)
         }, 500)
       }, 200)
     }
@@ -415,24 +419,30 @@ const hOp = computed(() => {
 const heroCue = computed(() => Math.max(0, 1 - scrollY.value / 110))
 
 // ── INTRO ──
+const introLen = () => VH() * 3.5
+
 const introOp = computed(() => {
-  const s = heroLen() * .46, e = heroLen() * .82
-  return scrollY.value < s ? 0 : scrollY.value >= e ? 1 : (scrollY.value - s) / (e - s)
+  const start = heroLen() * .5
+  const end = heroLen() * .85
+  if (scrollY.value < start) return 0
+  if (scrollY.value > end) return 1
+  return (scrollY.value - start) / (end - start)
 })
-const introY = computed(() => {
-  const s = heroLen() * .46, e = heroLen() * .82
-  return scrollY.value < s ? 38 : scrollY.value >= e ? 0 : 38 * (1 - (scrollY.value - s) / (e - s))
-})
+
 const iOff = computed(() => {
-  const ss = heroLen() + VH() * .1, se = heroLen() + VH() * .82
-  if (scrollY.value < ss) return [0, 0, 0]
-  const t = Math.min(1, (scrollY.value - ss) / (se - ss))
-  const m = window.innerWidth * .45
+  const exitStart = heroLen() + introLen() * .55
+  const exitEnd = heroLen() + introLen() * .95
+  if (scrollY.value < exitStart) return [0, 0, 0]
+  const t = Math.min(1, (scrollY.value - exitStart) / (exitEnd - exitStart))
+  const m = window.innerWidth * .6
   return [-t * m, t * m, -t * m * .72]
 })
+
 const iBlur = computed(() => {
-  const bs = heroLen() + VH() * .25, be = heroLen() + VH() * .78
-  return scrollY.value < bs ? 0 : Math.min(1, (scrollY.value - bs) / (be - bs)) * 9
+  const exitStart = heroLen() + introLen() * .55
+  const exitEnd = heroLen() + introLen() * .95
+  if (scrollY.value < exitStart) return 0
+  return Math.min(1, (scrollY.value - exitStart) / (exitEnd - exitStart)) * 14
 })
 const introCue = computed(() => {
   const sh = heroLen() * .82, hi = heroLen() + VH() * .18
@@ -470,9 +480,9 @@ function updateAbout() {
   const S = VH()
 
   // 1. Photo: fades in 0→S*0.8, fades out S*1.0→S*1.5
-  if (scrolled < S * .2) aPhoto.value = pr(scrolled, 0, S * .5)
-  else if (scrolled < S * 1.0) aPhoto.value = 1
-  else aPhoto.value = cl(1 - pr(scrolled, S * 1.0, S * 1.5), 0, 1)
+  if (scrolled < S * .05) aPhoto.value = pr(scrolled, 0, S * .2)
+  else if (scrolled < S * 1.4) aPhoto.value = 1
+  else aPhoto.value = cl(1 - pr(scrolled, S * 1.4, S * 1.8), 0, 1)
 
   // 2. WHO I AM? centered: appears S*1.2→S*1.7, fades S*2.2→S*2.7
   if (scrolled < S * 1.2) whoCenter.value = 0
@@ -674,26 +684,26 @@ body { font-family:var(--san); background:var(--bg); color:var(--tx); overflow-x
 /* ════════════════════════════════
    SECTION 2 — INTRO
 ════════════════════════════════ */
-.s-intro { height:170vh; position:relative }
+.intro-fixed { display:none }
+.s-intro { height:350vh; position:relative }
 .intro-pin { position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden }
-.intro-wrap { width:100%; will-change:transform,opacity; display:flex; flex-direction:column; align-items:center; padding:0 4%; text-align:center }
+.intro-wrap { width:100%; display:flex; flex-direction:column; align-items:center; padding:0 4%; text-align:center }
 .iline { display:flex; align-items:center; justify-content:center; line-height:1.04; will-change:transform }
 .role-line { gap:.1em }
 .itext { font-family:var(--ser); font-size:clamp(2.8rem,7.5vw,7.5rem); font-weight:400; color:var(--tx); white-space:nowrap }
 /* The small square (□) after "My Self" */
 .ibox { display:inline-block; width:.65em; height:.65em; background:rgba(232,229,223,.25); border-radius:3px; margin-left:.25em; vertical-align:middle; position:relative; top:-.08em }
 /* Role cycling slot */
-.role-slot { position:relative; display:inline-block; overflow:hidden; height:1.1em; min-width:4em }
-.role-word { font-family:var(--ser); font-size:clamp(2.8rem,7.5vw,7.5rem); font-weight:400; color:var(--acc); white-space:nowrap; display:inline-block; position:absolute; top:0; left:0 }
-.role-swap-enter-active,.role-swap-leave-active { transition:opacity .5s,transform .5s }
-.role-swap-enter-from { opacity:0; transform:translateY(40%) }
-.role-swap-leave-to { opacity:0; transform:translateY(-40%) }
+.role-slot { display:inline-block }
+.role-word { font-family:var(--ser); font-size:clamp(2.8rem,7.5vw,7.5rem); font-weight:400; color:var(--acc); white-space:nowrap; display:inline-block; opacity:0; transition:opacity .35s ease }
+.role-word.role-visible { opacity:1 }
+.role-swap-enter-active,.role-swap-leave-active,.role-swap-enter-from,.role-swap-leave-to { display:none }
 
 /* ════════════════════════════════
    SECTION 3 — ABOUT (sticky scroll)
    about-track height = 1100vh gives ~11 "screens" of scroll
 ════════════════════════════════ */
-.s-about { background:var(--bg) }
+.s-about { background:var(--bg); position:relative }
 .about-track { height:1100vh; position:relative }
 .about-pin { position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden }
 .about-layer { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; will-change:opacity }
