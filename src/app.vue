@@ -7,7 +7,7 @@
       <div class="ld-prog"><div class="ld-fill" :style="{width:ldPct+'%'}"></div></div>
       <div class="ld-cnt">
         <span class="ld-tag">LOADING</span>
-        <div class="ld-num">{{ Math.floor(ldPct) }}<em>%</em></div>
+        <div class="ld-name">MFaridS</div>
         <span class="ld-sub">UI/UX Designer &amp; Frontend Developer</span>
       </div>
     </div>
@@ -47,6 +47,13 @@
               <div class="cue-m"><div class="cue-d"></div></div>
               <span>SCROLL DOWN</span>
             </div>
+            <div class="swipe-cue">
+              <div class="swipe-arrows">
+                <span class="sw-arr sw-arr1">↑</span>
+                <span class="sw-arr sw-arr2">↑</span>
+              </div>
+              <span class="swipe-lbl">SWIPE TWICE</span>
+            </div>
           </div>
         </div>
 
@@ -72,36 +79,38 @@
               <div class="ab-txt">
                 <span class="ab-tag">WHO I AM</span>
                 <h2 class="ab-name"><span class="ab-fn">Muhammad</span><span class="ab-ln">Farid Syam</span></h2>
-                <p class="ab-bio">I'm a <strong>UI/UX Designer</strong> and <strong>Frontend Developer</strong> based in West Sulawesi, Indonesia. I'm a tech-savvy designer who loves building things for the web. With a solid foundation in Informatics Engineering, I spend my time mastering Figma and JavaScript. Currently, I'm diving deeper into the Vue.js ecosystem to build even better user experiences.</p>
-                <blockquote>"Design with soul, develop with logic."</blockquote>
-                <div class="ab-stats">
-                  <div class="ast"><span class="astn">11+</span><span class="astl">Projects</span></div>
-                  <div class="ast"><span class="astn">6</span><span class="astl">Certificates</span></div>
-                  <div class="ast"><span class="astn">2yr</span><span class="astl">Experience</span></div>
+                <p class="ab-bio">I'm a <strong>UI/UX Designer</strong> and <strong>Frontend Developer</strong> based in West Sulawesi, Indonesia — someone who believes great digital products are built where thoughtful design meets clean code. With a foundation in Informatics Engineering, I've spent the past two years shaping user experiences in Figma and bringing them to life with JavaScript. Right now, I'm deepening my craft in the Vue.js ecosystem, turning ideas into interfaces that are not just functional, but genuinely enjoyable to use.</p>
+                <div class="ab-bottom">
+                  <blockquote>"Design with soul, develop with logic."</blockquote>
+                  <div class="ab-stats">
+                    <div class="ast"><span class="astn">11+</span><span class="astl">Projects</span></div>
+                    <div class="ast"><span class="astn">6</span><span class="astl">Certificates</span></div>
+                    <div class="ast"><span class="astn">2yr</span><span class="astl">Experience</span></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div v-show="cur_sec===3" key="work" class="fp-slide bg-lt">
+        <div v-show="cur_sec===3" key="work" class="fp-slide bg-dk">
           <div class="sec-list">
             <div class="sl-inner">
               <div class="slhd">
-                <span class="sltag sltag-lt">SELECTED WORK</span>
-                <h2 class="slh2 slh2-dk">Projects</h2>
+                <span class="sltag">SELECTED WORK</span>
+                <h2 class="slh2">Projects</h2>
               </div>
-              <div class="slrows slrows-lt" ref="workListRef">
+              <div class="slrows" ref="workListRef">
                 <div v-for="(p,j) in projects" :key="p.title"
-                  class="slrow slrow-lt" :style="{animationDelay: j*0.04+'s'}"
+                  class="slrow" :style="{animationDelay: j*0.04+'s'}"
                   @click="openProj(p)" @mouseenter="hovP=p" @mouseleave="hovP=null">
-                  <span class="slrn slrn-lt">{{ String(j+1).padStart(2,'0') }}</span>
-                  <span class="slrt slrt-dk">{{ p.title }}</span>
-                  <span class="slrc slrc-lt">{{ p.badges[0] }}</span>
-                  <span class="slra slra-lt">—</span>
+                  <span class="slrn">{{ String(j+1).padStart(2,'0') }}</span>
+                  <span class="slrt">{{ p.title }}</span>
+                  <span class="slrc">{{ p.badges[0] }}</span>
+                  <span class="slra">—</span>
                 </div>
               </div>
-              <div class="scroll-hint-lt">
+              <div class="scroll-hint">
                 <span>↓ scroll</span>
               </div>
             </div>
@@ -138,17 +147,17 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===5" key="tech" class="fp-slide bg-lt">
+        <div v-show="cur_sec===5" key="tech" class="fp-slide bg-dk">
           <div class="sec-list">
             <div class="sl-inner">
               <div class="slhd">
-                <span class="sltag sltag-lt">TECH STACK</span>
-                <h2 class="slh2 slh2-dk">Tools &amp; Skills</h2>
+                <span class="sltag">TECH STACK</span>
+                <h2 class="slh2">Tools &amp; Skills</h2>
               </div>
               <div class="tgrid">
                 <div v-for="t in techStack" :key="t.name" class="tcell">
                   <div class="tcell-inner">
-                    <img :src="t.iconLight" :alt="t.name"/>
+                    <img :src="t.iconDark" :alt="t.name"/>
                     <span class="tcn">{{ t.name }}</span>
                     <span class="tcc">{{ t.category }}</span>
                   </div>
@@ -158,27 +167,14 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===6" key="phrase" class="fp-slide bg-dk">
-          <div class="sec-phrase">
-            <div class="ph-inner">
-              <p class="phsm">Dont Be Shy,</p>
-              <h2 class="phbig">Make The First<br>Move.</h2>
-              <div class="ph-cta" @click="goTo(8)">
-                <span>Get In Touch</span>
-                <span class="ph-arr">↓</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-show="cur_sec===7" key="summary" class="fp-slide bg-dk">
+        <div v-show="cur_sec===6" key="summary" class="fp-slide bg-dk">
           <div class="sec-summary">
             <div class="sl-inner">
               <div class="sum-hd">
                 <p class="sum-lbl">Summary.</p>
                 <h2 class="sum-name">Muhammad Farid Syam</h2>
                 <p class="sum-role">— UI/UX Designer &amp; Frontend Developer</p>
-                <p class="sum-bio">I'm a tech-savvy designer who loves building things for the web. Mastering Figma and the Vue.js ecosystem to create better user experiences.</p>
+                <p class="sum-bio">I craft clean, purposeful interfaces and bring them to life with code. Grounded in Informatics Engineering, I've spent the last two years sharpening my skills in Figma and JavaScript — and I'm currently leveling up with Vue.js to build faster, more dynamic web experiences. I believe great products live at the intersection of thoughtful design and solid engineering, and that's exactly where I choose to work.</p>
               </div>
               <div class="sum-cols">
                 <div class="scol">
@@ -213,6 +209,19 @@
           </div>
         </div>
 
+        <div v-show="cur_sec===7" key="phrase" class="fp-slide bg-dk">
+          <div class="sec-phrase">
+            <div class="ph-inner">
+              <p class="phsm">Dont Be Shy,</p>
+              <h2 class="phbig">Make The First<br>Move.</h2>
+              <div class="ph-cta" @click="goTo(8)">
+                <span>Get In Touch</span>
+                <span class="ph-arr">↓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div v-show="cur_sec===8" key="contact" class="fp-slide bg-dk">
           <div class="sec-contact">
             <div class="sl-inner ct-inner">
@@ -235,7 +244,6 @@
               </form>
               <footer class="ctfoot">
                 <span>© {{ yr }} Muhammad Farid Syam</span>
-                <span>Made with <span style="color:#e55">♥</span> in Makassar</span>
               </footer>
             </div>
           </div>
@@ -267,12 +275,12 @@
           <div class="mbox-full mbox-cert">
             <button class="mclose" @click="actCert=null"><i class="fas fa-times"></i></button>
             <div class="mf-top">
+              <img :src="actCert.images[ci]" :alt="actCert.title"/>
               <div v-if="actCert.images.length>1" class="cert-nav">
                 <button @click="ci=Math.max(0,ci-1)" :disabled="ci===0"><i class="fas fa-chevron-left"></i></button>
                 <span>{{ ci+1 }} / {{ actCert.images.length }}</span>
                 <button @click="ci=Math.min(actCert.images.length-1,ci+1)" :disabled="ci===actCert.images.length-1"><i class="fas fa-chevron-right"></i></button>
               </div>
-              <img :src="actCert.images[ci]" :alt="actCert.title"/>
             </div>
             <div class="mf-bot">
               <span class="mf-tag">CERTIFICATE</span>
@@ -298,6 +306,8 @@ import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { projects, certificates, techStack, playlist } from '@/data/index.js'
 import emailjs from '@emailjs/browser'
 
+emailjs.init('UrpG9fqigxq0B2m7k')
+
 const yr = new Date().getFullYear()
 
 const SECTIONS = [
@@ -307,11 +317,11 @@ const SECTIONS = [
   {id:'work',    label:'Projects'},
   {id:'certs',   label:'Certificates'},
   {id:'tech',    label:'Tools'},
-  {id:'phrase',  label:'Move'},
   {id:'summary', label:'Summary'},
+  {id:'phrase',  label:'Move'},
   {id:'contact', label:'Contact'},
 ]
-const LIGHT_SECS = [3, 5]
+const LIGHT_SECS = []
 
 const loading = ref(true)
 const ldPct = ref(0)
@@ -339,7 +349,7 @@ function goTo(idx) {
   txName.value = idx > cur_sec.value ? 'slide-down' : 'slide-up'
   going.value = true
   cur_sec.value = idx
-  if (!musicPlayed && idx >= 1) { musicPlayed = true; tryPlay() }
+  if (!musicPlayed) { musicPlayed = true; tryPlay() }
   setTimeout(() => { going.value = false }, 820)
 }
 
@@ -363,25 +373,37 @@ function onWheel(e) {
     if (e.deltaY > 0 && !atBot) { el.scrollTop += e.deltaY * 0.8; return }
     if (e.deltaY < 0 && !atTop) { el.scrollTop += e.deltaY * 0.8; return }
   }
+  // Handle summary section internal scroll
+  const summaryEl = cur_sec.value === 6 ? document.querySelector('.sec-summary') : null
+  if (summaryEl) {
+    const atTop = summaryEl.scrollTop <= 2
+    const atBot = summaryEl.scrollTop + summaryEl.clientHeight >= summaryEl.scrollHeight - 4
+    if (e.deltaY > 0 && !atBot) { summaryEl.scrollTop += e.deltaY * 0.8; return }
+    if (e.deltaY < 0 && !atTop) { summaryEl.scrollTop += e.deltaY * 0.8; return }
+  }
   wheelAcc += e.deltaY
   clearTimeout(wheelTimer)
-  wheelTimer = setTimeout(() => { wheelAcc = 0 }, 150)
-  if (Math.abs(wheelAcc) > 60) {
+  wheelTimer = setTimeout(() => { wheelAcc = 0 }, 200)
+  if (Math.abs(wheelAcc) > 80) {
     if (wheelAcc > 0) next(); else prev()
     wheelAcc = 0
   }
 }
 
-let touchY0 = 0, touchX0 = 0
+// Touch: require 2 swipes on ALL sections on mobile to navigate
+let touchY0 = 0, touchX0 = 0, touchSwipeCount = 0, lastSwipeSec = -1
 function onTouchStart(e) {
   touchY0 = e.touches[0].clientY
   touchX0 = e.touches[0].clientX
+  // Try to play music on first user touch (mobile autoplay policy)
+  if (!musicPlayed) { musicPlayed = true; tryPlay() }
 }
 function onTouchEnd(e) {
   if (going.value) return
   const dy = touchY0 - e.changedTouches[0].clientY
   const dx = Math.abs(touchX0 - e.changedTouches[0].clientX)
-  if (dx > Math.abs(dy) || Math.abs(dy) < 35) return
+  if (dx > Math.abs(dy) || Math.abs(dy) < 40) return
+
   const el = getScrollableEl()
   if (el) {
     const atTop = el.scrollTop <= 2
@@ -389,7 +411,37 @@ function onTouchEnd(e) {
     if (dy > 0 && !atBot) return
     if (dy < 0 && !atTop) return
   }
-  if (dy > 35) next(); else if (dy < -35) prev()
+
+  // Summary section: check internal scroll
+  const summaryEl = cur_sec.value === 6 ? document.querySelector('.sec-summary') : null
+  if (summaryEl) {
+    const atTop = summaryEl.scrollTop <= 2
+    const atBot = summaryEl.scrollTop + summaryEl.clientHeight >= summaryEl.scrollHeight - 4
+    if (dy > 0 && !atBot) return
+    if (dy < 0 && !atTop) return
+  }
+
+  // About section mobile: check internal scroll
+  const aboutEl = cur_sec.value === 2 ? document.querySelector('.ab-body') : null
+  if (aboutEl) {
+    const atTop = aboutEl.scrollTop <= 2
+    const atBot = aboutEl.scrollTop + aboutEl.clientHeight >= aboutEl.scrollHeight - 4
+    if (dy > 0 && !atBot) return
+    if (dy < 0 && !atTop) return
+  }
+
+  // Double-swipe required on ALL sections (mobile only)
+  if (lastSwipeSec === cur_sec.value) {
+    touchSwipeCount++
+  } else {
+    touchSwipeCount = 1
+    lastSwipeSec = cur_sec.value
+  }
+  if (touchSwipeCount < 2) return
+  touchSwipeCount = 0
+  lastSwipeSec = -1
+
+  if (dy > 40) next(); else if (dy < -40) prev()
 }
 
 function onKey(e) {
@@ -513,11 +565,20 @@ async function send() {
   if (!form.name||!form.email||!form.message) return
   sending.value = true
   try {
-    await emailjs.send('service_qg8j9nh','template_j9ivxnn',{from_name:form.name,reply_to:form.email,message:form.message},'UrpG9fqigxq0B2m7k')
-    showToast('ok','Sent!',"I'll get back to you soon.")
-    Object.assign(form,{name:'',email:'',message:''})
-  } catch { showToast('err','Failed','Please try again.') }
-  finally { sending.value = false }
+    await emailjs.send('service_d1bb4t2', 'template_whcrepp', {
+      name: form.name,
+      email: form.email,
+      message: form.message,
+      reply_to: form.email
+    })
+    showToast('ok', 'Sent!', "I'll get back to you soon.")
+    Object.assign(form, {name:'', email:'', message:''})
+  } catch(err) {
+    console.error('EmailJS error:', err)
+    showToast('err', 'Failed', 'Please check your connection and try again.')
+  } finally {
+    sending.value = false
+  }
 }
 
 const experiences = [
@@ -532,6 +593,14 @@ onMounted(() => {
   window.addEventListener('keydown', onKey)
   const vp = vpRef.value
   if (vp) vp.addEventListener('wheel', onWheel, {passive:false})
+  document.addEventListener('wheel', onWheel, {passive:false})
+  // Disable pinch zoom on mobile
+  document.addEventListener('gesturestart', e => e.preventDefault(), {passive:false})
+  document.addEventListener('gesturechange', e => e.preventDefault(), {passive:false})
+  document.addEventListener('gestureend', e => e.preventDefault(), {passive:false})
+  document.addEventListener('touchmove', e => {
+    if (e.touches.length > 1) e.preventDefault()
+  }, {passive:false})
   roleTimer = setInterval(cycleRole, 2800)
 })
 onUnmounted(() => {
@@ -540,6 +609,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKey)
   const vp = vpRef.value
   if (vp) vp.removeEventListener('wheel', onWheel)
+  document.removeEventListener('wheel', onWheel)
   clearInterval(roleTimer)
 })
 </script>
@@ -547,7 +617,8 @@ onUnmounted(() => {
 <style>
 :root{--dk:#1b1b1b;--lt:#e8e5df;--tx:#e8e5df;--txd:rgba(232,229,223,.42);--txdk:#1a1a1a;--acc:#289DF2;--bdr:rgba(232,229,223,.09);--bdl:rgba(26,26,26,.12);--ser:Georgia,'Times New Roman',serif;--san:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:var(--san);background:var(--dk);color:var(--tx)}
+html,body{height:100%;overflow:hidden;font-family:var(--san);background:var(--dk);color:var(--tx);touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
+*{touch-action:manipulation}
 ::selection{background:rgba(40,157,242,.18)}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:rgba(232,229,223,.15);border-radius:3px}
@@ -559,13 +630,13 @@ body{cursor:none}
 .cur-dot{position:fixed;pointer-events:none;z-index:9999;width:4px;height:4px;border-radius:50%;background:var(--acc);transform:translate(-50%,-50%)}
 @media(pointer:coarse){.cur-ring,.cur-dot{display:none}}
 
+@font-face{font-family:'PolySans';src:url('/src/assets/fonts/polysanstrial-bulky.otf') format('opentype');font-weight:400;font-style:normal}
 .loader{position:fixed;inset:0;z-index:9000;background:var(--dk);display:flex;align-items:center;justify-content:center}
 .ld-prog{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(232,229,223,.07)}
-.ld-fill{height:100%;background:var(--acc);transition:width .04s linear}
-.ld-cnt{display:flex;flex-direction:column;align-items:center;gap:.8rem;text-align:center}
+.ld-fill{height:100%;background:#fff;transition:width .04s linear}
+.ld-cnt{display:flex;flex-direction:column;align-items:center;gap:1.2rem;text-align:center}
 .ld-tag{font-size:.5rem;letter-spacing:7px;text-transform:uppercase;color:rgba(232,229,223,.2)}
-.ld-num{font-family:var(--ser);font-size:clamp(5rem,18vw,11rem);font-weight:400;color:var(--tx);line-height:1;letter-spacing:-4px}
-.ld-num em{font-style:normal;font-size:.38em;color:var(--acc);letter-spacing:0}
+.ld-name{font-family:'PolySans',var(--san);font-size:clamp(3rem,10vw,7rem);font-weight:400;color:var(--tx);letter-spacing:-.02em;line-height:1}
 .ld-sub{font-size:.56rem;letter-spacing:3px;color:rgba(232,229,223,.2)}
 .ldfade-leave-active{transition:opacity .45s,transform .45s}
 .ldfade-leave-to{opacity:0;transform:scale(1.03)}
@@ -610,6 +681,15 @@ body{cursor:none}
 .cue-d{width:3px;height:3px;background:var(--acc);border-radius:50%;animation:cscr 1.8s ease-in-out infinite}
 @keyframes cscr{0%{transform:translateY(0);opacity:1}75%{transform:translateY(11px);opacity:0}100%{transform:translateY(0);opacity:0}}
 
+.swipe-cue{display:none;position:absolute;bottom:7%;left:50%;transform:translateX(-50%);flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+@media(pointer:coarse){.cue{display:none}.swipe-cue{display:flex}}
+.swipe-arrows{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sw-arr{font-size:1rem;color:var(--acc);display:block;line-height:1}
+.sw-arr1{animation:swpulse 1.6s ease-in-out infinite}
+.sw-arr2{animation:swpulse 1.6s ease-in-out infinite .28s}
+@keyframes swpulse{0%,100%{opacity:.15;transform:translateY(4px)}50%{opacity:.9;transform:translateY(0)}}
+.swipe-lbl{font-size:.44rem;letter-spacing:5px;text-transform:uppercase;color:rgba(232,229,223,.2);margin-top:4px}
+
 .sec-hero{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .hero-letters{display:flex;align-items:center;user-select:none}
 .hlf,.hls{font-family:var(--ser);font-size:clamp(8rem,28vw,22rem);font-weight:400;color:var(--tx);line-height:.88;display:inline-block}
@@ -633,46 +713,52 @@ body{cursor:none}
 .ab-track{display:flex;width:max-content;animation:marq 22s linear infinite}
 .ab-track span{font-family:var(--ser);font-size:clamp(2rem,4vw,3.8rem);color:rgba(232,229,223,.04);white-space:nowrap;padding:0 1.5rem;font-weight:400}
 @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ab-body{flex:1;display:grid;grid-template-columns:320px 1fr;gap:4rem;align-items:center;max-width:1100px;margin:0 auto;padding:4rem 5% 3rem;width:100%;overflow:hidden}
+.ab-body{flex:1;display:grid;grid-template-columns:300px 1fr;gap:4rem;align-items:center;max-width:1200px;margin:0 auto;padding:4rem 5% 3rem;width:100%;overflow:visible}
 .ab-photo{aspect-ratio:3/4;border-radius:16px;overflow:hidden;border:1px solid var(--bdr);flex-shrink:0;min-height:0}
 .ab-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%)}
+.ab-txt{overflow:visible;min-width:0}
 .ab-tag{font-size:.52rem;letter-spacing:6px;text-transform:uppercase;color:var(--acc);display:block;margin-bottom:1rem}
-.ab-name{font-family:var(--ser);font-size:clamp(2.2rem,4.5vw,4rem);font-weight:400;color:var(--tx);letter-spacing:-2px;line-height:1.03;margin-bottom:1.2rem;display:flex;flex-direction:column}
-.ab-fn{display:block}
-.ab-ln{display:block}
-.ab-bio{font-size:clamp(.88rem,1.2vw,1rem);line-height:1.85;color:var(--txd);margin-bottom:1.1rem}
+.ab-name{font-family:var(--ser);font-size:clamp(2.2rem,3.8vw,3.8rem);font-weight:400;color:var(--tx);letter-spacing:-2px;line-height:1.05;margin-bottom:1rem;white-space:nowrap;overflow:visible}
+.ab-fn{display:inline}
+.ab-ln{display:inline}
+.ab-bio{font-size:clamp(.82rem,1.1vw,.95rem);line-height:1.85;color:var(--txd);margin-bottom:1rem;text-align:justify}
 .ab-bio strong{color:var(--tx)}
-blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic;color:rgba(232,229,223,.3);font-size:.88rem;margin-bottom:1.6rem}
-.ab-stats{display:flex;gap:2.5rem}
-.ast{display:flex;flex-direction:column}
-.astn{font-family:var(--ser);font-size:2.2rem;font-weight:400;color:var(--tx);letter-spacing:-1px;line-height:1}
-.astl{font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:rgba(232,229,223,.26);margin-top:.2rem}
+blockquote{border-left:2px solid var(--acc);padding:.35rem .8rem;font-style:italic;color:rgba(232,229,223,.3);font-size:.82rem;margin-bottom:0;flex:1;min-width:0}
+.ab-stats{display:flex;gap:2rem;align-items:flex-start}
+.ab-bottom{display:flex;align-items:center;gap:2rem;margin-top:1rem}
+.ast{display:flex;flex-direction:column;flex-shrink:0}
+.astn{font-family:var(--ser);font-size:2rem;font-weight:400;color:var(--tx);letter-spacing:-1px;line-height:1}
+.astl{font-size:.46rem;letter-spacing:3px;text-transform:uppercase;color:rgba(232,229,223,.26);margin-top:.2rem}
 @media(max-width:900px){
-  .ab-body{grid-template-columns:240px 1fr;gap:2.5rem;padding:3.5rem 5% 2.5rem}
+  .ab-body{grid-template-columns:220px 1fr;gap:2.5rem;padding:3.5rem 5% 2.5rem}
+  .ab-name{font-size:clamp(1.8rem,3.5vw,3rem)}
 }
 @media(max-width:700px){
-  .ab-body{grid-template-columns:1fr;padding:4.5rem 5% 3rem;gap:1.5rem;overflow-y:auto;align-items:flex-start}
+  .ab-body{grid-template-columns:1fr;padding:5rem 5% 4rem;gap:1.2rem;overflow-y:auto;align-items:flex-start;height:100%}
   .ab-photo{display:none}
-  .ab-name{font-size:clamp(2.8rem,12vw,5rem);letter-spacing:-2.5px}
-  .ab-bio{font-size:.93rem}
-  .ab-stats{gap:2.2rem}
-  .astn{font-size:2.6rem}
-  .ab-tag{margin-bottom:1rem}
+  .ab-name{font-size:clamp(2rem,9vw,3.5rem);letter-spacing:-1.5px;white-space:normal}
+  .ab-bio{font-size:.9rem;text-align:left}
+  .ab-bottom{flex-direction:column;align-items:flex-start;gap:.8rem}
+  blockquote{font-size:.78rem}
+  .ab-stats{gap:1.8rem}
+  .astn{font-size:2.2rem}
+  .ab-tag{margin-bottom:.6rem}
 }
 
 .sec-list{height:100%;display:flex;align-items:center;overflow:hidden;position:relative}
-.sl-inner{max-width:1100px;margin:0 auto;padding:0 5%;width:100%}
+.sl-inner{max-width:1100px;margin:0 auto;padding:0 5%;width:100%;overflow:hidden}
 .slhd{margin-bottom:1.6rem}
 .slh2{font-family:var(--ser);font-size:clamp(1.8rem,4.5vw,4rem);font-weight:400;color:var(--tx);letter-spacing:-2px}
 .slh2-dk{color:var(--txdk)}
 .sltag{font-size:.52rem;letter-spacing:6px;text-transform:uppercase;color:rgba(232,229,223,.3);display:block;margin-bottom:.6rem}
 .sltag-lt{color:rgba(26,26,26,.3)}
-.slrows{border-top:1px solid var(--bdr);max-height:calc(100vh - 260px);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(232,229,223,.12) transparent}
-.slrows-lt{border-top-color:var(--bdl);scrollbar-color:rgba(26,26,26,.12) transparent}
+.slrows{border-top:1px solid var(--bdr);max-height:calc(100vh - 260px);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.slrows::-webkit-scrollbar{display:none}
+.slrows-lt{border-top-color:var(--bdl)}
 .scroll-hint{text-align:center;padding:.5rem 0;font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:rgba(232,229,223,.18);animation:blink 2s ease-in-out infinite}
 .scroll-hint-lt .scroll-hint,.scroll-hint-lt{text-align:center;padding:.5rem 0;font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:rgba(26,26,26,.22);animation:blink 2s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
-.slrow{display:grid;grid-template-columns:40px 1fr auto 22px;align-items:center;gap:1.2rem;padding:.95rem 0;border-bottom:1px solid var(--bdr);cursor:none;transition:padding-left .2s,background .2s;animation:rowIn .55s both}
+.slrow{display:grid;grid-template-columns:40px 1fr auto 22px;align-items:center;gap:1.2rem;padding:.95rem 0;border-bottom:1px solid var(--bdr);cursor:none;transition:padding-left .2s;animation:rowIn .55s both;min-width:0}
 .slrow-lt{border-bottom-color:var(--bdl);cursor:none}
 @media(pointer:coarse){.slrow{cursor:pointer}.slrow-lt{cursor:pointer}}
 .slrow:hover{padding-left:.5rem}
@@ -694,18 +780,18 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .imgf img{width:100%;height:100%;object-fit:cover}
 @media(max-width:860px){.slrow{grid-template-columns:32px 1fr 18px}.slrc{display:none}.slrow-dk{grid-template-columns:1fr auto 18px}.imgf{display:none}}
 
-.tgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--bdl);border:1px solid var(--bdl);border-radius:12px;overflow:hidden;margin-top:.6rem}
-.tcell{background:var(--lt);transition:background .2s;cursor:default;overflow:hidden;position:relative}
-.tcell-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:2rem 1rem;text-align:center;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.tgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-top:.6rem}
+.tcell{background:rgba(255,255,255,.03);transition:background .2s;cursor:default;overflow:hidden;position:relative}
+.tcell:hover{background:rgba(255,255,255,.06)}
 .tcell:hover .tcell-inner{transform:translateY(-4px)}
 .tcell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--acc);transform:scaleX(0);transition:transform .3s cubic-bezier(.16,1,.3,1)}
 .tcell:hover::after{transform:scaleX(1)}
-.tcell img{width:32px;height:32px;object-fit:contain}
-.tcn{font-size:.7rem;font-weight:600;color:var(--txdk)}
-.tcc{font-size:.44rem;letter-spacing:2px;text-transform:uppercase;color:rgba(26,26,26,.28)}
+.tcell img{width:44px;height:44px;object-fit:contain}
+.tcn{font-size:.82rem;font-weight:600;color:var(--tx)}
+.tcc{font-size:.5rem;letter-spacing:2px;text-transform:uppercase;color:var(--txd)}
+.tcell-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;padding:2.6rem 1.2rem;text-align:center;transition:transform .35s cubic-bezier(.16,1,.3,1)}
 @media(max-width:1024px){.tgrid{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:600px){.tgrid{grid-template-columns:repeat(3,1fr)}.tcell-inner{padding:1.4rem .6rem}}
-
+@media(max-width:600px){.tgrid{grid-template-columns:repeat(3,1fr)}.tcell-inner{padding:1.4rem .6rem}.tcell img{width:28px;height:28px}}
 .sec-phrase{height:100%;display:flex;align-items:center;overflow:hidden}
 .ph-inner{max-width:1100px;margin:0 auto;padding:0 5%;width:100%}
 .phsm{font-size:clamp(.8rem,.9vw,.95rem);color:var(--txd);margin-bottom:1rem;letter-spacing:.5px}
@@ -726,7 +812,7 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 @media(max-width:900px){.sum-name{font-size:clamp(2rem,6vw,4rem);white-space:normal;line-height:.95}}
 @media(max-width:700px){.sum-name{font-size:clamp(1.9rem,8vw,3.2rem);line-height:1;white-space:normal}}
 .sum-role{font-size:.82rem;color:var(--txd);margin-bottom:.9rem}
-.sum-bio{font-size:clamp(.85rem,1.2vw,.92rem);line-height:1.78;color:var(--txd);max-width:560px}
+.sum-bio{font-size:clamp(.85rem,1.2vw,.95rem);line-height:1.85;color:var(--txd);max-width:100%;text-align:justify}
 .sum-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem 3rem;border-top:1px solid var(--bdr);padding-top:2.5rem;margin-top:2.5rem}
 @media(max-width:900px){.sum-cols{grid-template-columns:1fr 1fr;gap:2rem 2.5rem}}
 @media(max-width:700px){.sum-cols{grid-template-columns:1fr;gap:2rem}}
@@ -743,7 +829,8 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .slink:hover .simt{color:var(--acc)}
 
 .sec-contact{height:100%;display:flex;align-items:center;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.ct-inner{padding:2rem 5%;max-width:680px;margin:0 auto;width:100%}
+.ct-inner{padding:4rem 5%;max-width:680px;width:100%}
+@media(max-width:700px){.sec-contact{align-items:flex-start}.ct-inner{padding:5rem 5% 3rem}}
 .cthd{margin-bottom:2rem;text-align:center}
 .ctag{font-size:.52rem;letter-spacing:6px;text-transform:uppercase;color:var(--acc);display:block;margin-bottom:.7rem}
 .cttitle{font-family:var(--ser);font-size:clamp(2rem,5vw,4.5rem);font-weight:400;color:var(--tx);letter-spacing:-3px;line-height:1.04;margin:.65rem 0 .9rem}
@@ -759,7 +846,7 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .cff input:focus,.cff textarea:focus{border-bottom-color:var(--acc)}
 .cff input::placeholder,.cff textarea::placeholder{color:rgba(232,229,223,.13)}
 .cff textarea{resize:none;min-height:100px}
-.cfbtn{align-self:flex-start;display:inline-flex;align-items:center;gap:.65rem;padding:.7rem 1.6rem;background:transparent;border:1px solid rgba(232,229,223,.12);border-radius:2px;color:var(--tx);font-family:inherit;font-size:.66rem;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;margin-top:.2rem}
+.cfbtn{align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-width:180px;padding:.7rem 1.6rem;background:transparent;border:1px solid rgba(232,229,223,.12);border-radius:2px;color:var(--tx);font-family:inherit;font-size:.66rem;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;margin-top:.2rem}
 @media(pointer:coarse){.cfbtn{cursor:pointer}}
 .cfbtn:hover:not(:disabled){border-color:var(--acc);color:var(--acc);background:rgba(40,157,242,.04)}
 .cfbtn:disabled{opacity:.5}
@@ -773,11 +860,11 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .mbox-cert{flex-direction:row}
 @media(max-width:700px){.mbox-cert{flex-direction:column}}
 .mf-top{flex:1;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3.5rem 3rem 2rem;overflow:hidden;min-height:0}
-.mf-top img{max-width:100%;width:auto;border-radius:10px;object-fit:contain;max-height:calc(100% - 1rem)}
-.mf-top .cert-nav{margin-bottom:1.2rem;align-self:center}
+.mf-top img{max-width:100%;width:auto;border-radius:10px;object-fit:contain;max-height:calc(100% - 4rem);flex:1;min-height:0}
+.mf-top .cert-nav{margin-top:1rem;margin-bottom:0;align-self:center}
 @media(max-width:700px){
-  .mf-top{flex:none;height:58vh;padding:3.2rem 1.2rem 1.2rem}
-  .mf-top img{max-height:100%;width:100%;object-fit:contain}
+  .mf-top{flex:none;height:60vh;padding:3.2rem 1.2rem 1.2rem}
+  .mf-top img{max-height:calc(100% - 3.5rem);width:100%;object-fit:contain;flex:1}
 }
 .mf-bot{flex-shrink:0;padding:1.4rem 2rem;border-top:1px solid rgba(232,229,223,.07);background:#111;display:flex;flex-direction:column;gap:.4rem}
 @media(min-width:701px){.mf-bot{width:260px;flex-shrink:0;padding:3.5rem 1.8rem;border-top:none;border-left:1px solid rgba(232,229,223,.07);height:100%;overflow-y:auto;gap:.9rem;justify-content:center}}
@@ -810,7 +897,8 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .mfade-enter-active,.mfade-leave-active{transition:opacity .22s}
 .mfade-enter-from,.mfade-leave-to{opacity:0}
 
-.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:#1b1b1b;border:1px solid var(--bdr);border-radius:10px;padding:.82rem 1.1rem;display:flex;align-items:flex-start;gap:.65rem;max-width:280px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.toast{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:9999;background:#1b1b1b;border:1px solid var(--bdr);border-radius:10px;padding:.82rem 1.4rem;display:flex;align-items:flex-start;gap:.65rem;min-width:240px;max-width:360px;box-shadow:0 10px 40px rgba(0,0,0,.6);animation:toastDrop .3s cubic-bezier(.16,1,.3,1)}
+@keyframes toastDrop{from{opacity:0;transform:translateX(-50%) translateY(-12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .toast.ok{border-left:3px solid var(--acc)}
 .toast.err{border-left:3px solid #e55}
 .toast i:first-child{font-size:.95rem;margin-top:2px}
@@ -819,5 +907,5 @@ blockquote{border-left:2px solid var(--acc);padding:.4rem 1rem;font-style:italic
 .toast strong{font-size:.8rem;display:block;margin-bottom:.1rem}
 .toast p{font-size:.7rem;color:var(--txd);margin:0}
 .toast-enter-active,.toast-leave-active{transition:all .3s}
-.toast-enter-from,.toast-leave-to{opacity:0;transform:translateX(12px)}
+.toast-enter-from,.toast-leave-to{opacity:0;transform:translateX(-50%) translateY(-12px)}
 </style>
