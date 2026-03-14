@@ -615,18 +615,18 @@ body{cursor:none}
 .hlf,.hls{font-family:var(--ser);font-size:clamp(8rem,28vw,22rem);font-weight:400;color:var(--tx);line-height:.88;display:inline-block}
 .hldot{width:clamp(14px,2.5vw,32px);height:clamp(14px,2.5vw,32px);border-radius:50%;background:var(--acc);flex-shrink:0;margin:0 clamp(3px,.6vw,8px);align-self:flex-end;margin-bottom:clamp(8px,1.8vw,24px)}
 
-.sec-intro{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.ilines{display:flex;flex-direction:column;align-items:flex-start;padding:0 5%;gap:.5rem}
+.sec-intro{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ilines{display:flex;flex-direction:column;align-items:flex-start;padding:0 5%;gap:.5rem;width:100%;max-width:1100px;margin:0 auto;flex-shrink:0}
 .il{font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;color:var(--tx);line-height:1.1;white-space:nowrap}
 @media(max-width:600px){.il{white-space:normal;font-size:clamp(1.9rem,8.5vw,3.5rem)}}
 .il-role{display:flex;align-items:baseline;gap:.22em;white-space:nowrap}
 @media(max-width:600px){.il-role{white-space:nowrap;overflow:hidden}}
-.role-wrap{display:inline-block;font-style:italic;font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;line-height:1.1;white-space:nowrap;overflow:hidden}
+.role-wrap{display:inline-flex;font-style:italic;font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;line-height:1.1;white-space:nowrap;overflow:hidden}
 @media(max-width:600px){.role-wrap{font-size:clamp(1.6rem,7.5vw,3rem)}}
 .role-ch{display:inline-block;color:var(--acc);font-style:italic;transition:color .1s ease}
 .role-ch.settled{color:var(--acc)}
 .role-ch:not(.settled).active{color:rgba(40,157,242,.4)}
-.role-ch.inactive{color:transparent;pointer-events:none}
+.role-ch.inactive{visibility:hidden;pointer-events:none}
 
 .sec-about{height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative}
 .ab-marq{overflow:hidden;position:absolute;bottom:0;left:0;right:0;padding:.5rem 0;z-index:1;pointer-events:none}
