@@ -309,9 +309,8 @@
         </div>
       </Transition>
       <Transition name="notif-fade">
-        <div v-if="toast.on" class="notif-overlay" @click.self="toast.on=false">
+        <div v-if="toast.on" class="notif-overlay">
           <div class="notif-card">
-            <button class="notif-close" @click="toast.on=false"><i class="fas fa-times"></i></button>
             <div class="notif-icon" :class="{error: toast.t==='err'}">
               <i :class="toast.t==='ok' ? 'fas fa-check' : 'fas fa-exclamation'"></i>
             </div>
@@ -319,6 +318,7 @@
               <h4>{{ toast.ttl }}</h4>
               <p>{{ toast.msg }}</p>
             </div>
+            <div class="notif-bar"><div class="notif-bar-fill" :class="{error: toast.t==='err'}"></div></div>
           </div>
         </div>
       </Transition>
@@ -547,7 +547,7 @@ const sending = ref(false)
 const toast = reactive({ on:false, t:'ok', ttl:'', msg:'' })
 function showToast(t,ttl,msg) {
   Object.assign(toast,{on:true,t,ttl,msg})
-  setTimeout(() => { toast.on = false }, 4000)
+  setTimeout(() => { toast.on = false }, 3000)
 }
 async function send() {
   if (document.getElementById('hp')?.value) return
@@ -576,10 +576,39 @@ const experiences = [
   {name:'Panggilin',role:'Frontend Developer',period:'Jun 2021 – Mar 2022'},
 ]
 
+// ── Content Protection ──────────────────────────────────────────────────────
+function blockContextMenu(e) { e.preventDefault() }
+
+function blockSelectStart(e) {
+  // Allow selection inside contact form inputs/textarea
+  if (e.target.closest('input, textarea')) return
+  e.preventDefault()
+}
+
+function blockDevKeys(e) {
+  // Block F12
+  if (e.key === 'F12') { e.preventDefault(); return }
+  // Block Ctrl+Shift+C / Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+K (DevTools)
+  if (e.ctrlKey && e.shiftKey && ['c','C','i','I','j','J','k','K'].includes(e.key)) {
+    e.preventDefault(); return
+  }
+  // Block Ctrl+U (view source)
+  if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return }
+  // Block Ctrl+S (save page)
+  if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return }
+  // Block Ctrl+A (select all) — outside form
+  if (e.ctrlKey && (e.key === 'a' || e.key === 'A')) {
+    if (!e.target.closest('input, textarea')) e.preventDefault()
+  }
+}
+
 onMounted(() => {
   startLoad()
   window.addEventListener('mousemove', onMouse, {passive:true})
   window.addEventListener('keydown', onKey)
+  window.addEventListener('keydown', blockDevKeys)
+  document.addEventListener('contextmenu', blockContextMenu)
+  document.addEventListener('selectstart', blockSelectStart)
   const vp = vpRef.value
   if (vp) vp.addEventListener('wheel', onWheel, {passive:false})
   document.addEventListener('wheel', onWheel, {passive:false})
@@ -595,6 +624,9 @@ onUnmounted(() => {
   cancelAnimationFrame(ldRaf)
   window.removeEventListener('mousemove', onMouse)
   window.removeEventListener('keydown', onKey)
+  window.removeEventListener('keydown', blockDevKeys)
+  document.removeEventListener('contextmenu', blockContextMenu)
+  document.removeEventListener('selectstart', blockSelectStart)
   const vp = vpRef.value
   if (vp) vp.removeEventListener('wheel', onWheel)
   document.removeEventListener('wheel', onWheel)
@@ -606,7 +638,8 @@ onUnmounted(() => {
 :root{--dk:#1b1b1b;--lt:#e8e5df;--tx:#e8e5df;--txd:rgba(232,229,223,.42);--txdk:#1a1a1a;--acc:#289DF2;--bdr:rgba(232,229,223,.09);--bdl:rgba(26,26,26,.12);--ser:Georgia,'Times New Roman',serif;--san:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;font-family:var(--san);background:var(--dk);color:var(--tx);touch-action:pan-x pan-y;-ms-touch-action:pan-x pan-y}
-*{touch-action:manipulation}
+*{touch-action:manipulation;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
 ::selection{background:rgba(40,157,242,.18)}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:rgba(232,229,223,.15);border-radius:3px}
@@ -951,24 +984,25 @@ blockquote{border-left:2px solid var(--acc);padding:.35rem .8rem;font-style:ital
 .mfade-enter-active,.mfade-leave-active{transition:opacity .22s}
 .mfade-enter-from,.mfade-leave-to{opacity:0}
 
-.notif-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem}
-.notif-card{background:rgba(20,20,20,.92);border:1px solid rgba(232,229,223,.12);border-radius:20px;padding:2.2rem 2rem;max-width:380px;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.4rem;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.6)}
-.notif-close{position:absolute;top:.9rem;right:.9rem;width:32px;height:32px;background:rgba(232,229,223,.07);border:1px solid rgba(232,229,223,.12);border-radius:50%;color:rgba(232,229,223,.5);font-size:.72rem;cursor:none;display:flex;align-items:center;justify-content:center;transition:all .25s}
-@media(pointer:coarse){.notif-close{cursor:pointer}}
-.notif-close:hover{background:var(--acc);border-color:var(--acc);color:#fff;transform:rotate(90deg)}
-.notif-icon{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(40,157,242,.1);border:3px solid var(--acc);position:relative;flex-shrink:0}
-.notif-icon::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;border:3px solid var(--acc);animation:notifPulse 1.6s ease-out infinite}
-@keyframes notifPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.55);opacity:0}}
-.notif-icon i{font-size:2rem;color:var(--acc)}
-.notif-icon.error{background:rgba(255,77,77,.1);border-color:#ff4d4d}
+.notif-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.5rem;pointer-events:none}
+.notif-card{background:#111111;border:1px solid rgba(232,229,223,.1);border-radius:16px;padding:2.4rem 2.2rem 1.6rem;max-width:360px;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.3rem;position:relative;box-shadow:0 32px 64px rgba(0,0,0,.85),0 0 0 1px rgba(232,229,223,.04);overflow:hidden;pointer-events:auto}
+.notif-icon{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(40,157,242,.08);border:2px solid var(--acc);position:relative;flex-shrink:0}
+.notif-icon::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid var(--acc);animation:notifPulse 1.8s ease-out infinite}
+@keyframes notifPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+.notif-icon i{font-size:1.8rem;color:var(--acc)}
+.notif-icon.error{background:rgba(255,77,77,.08);border-color:#ff4d4d}
 .notif-icon.error::before{border-color:#ff4d4d}
 .notif-icon.error i{color:#ff4d4d}
 .notif-msg{text-align:center}
-.notif-msg h4{font-size:1.3rem;font-weight:700;color:var(--tx);margin-bottom:.4rem;font-family:var(--san)}
-.notif-msg p{font-size:.85rem;color:var(--txd);line-height:1.65}
+.notif-msg h4{font-size:1.15rem;font-weight:700;color:var(--tx);margin-bottom:.35rem;font-family:var(--san)}
+.notif-msg p{font-size:.82rem;color:var(--txd);line-height:1.65}
+.notif-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(232,229,223,.06)}
+.notif-bar-fill{height:100%;background:var(--acc);animation:notifCountdown 3s linear forwards;transform-origin:left}
+.notif-bar-fill.error{background:#ff4d4d}
+@keyframes notifCountdown{from{width:100%}to{width:0%}}
 .notif-fade-enter-active,.notif-fade-leave-active{transition:opacity .3s,transform .3s}
 .notif-fade-enter-from,.notif-fade-leave-to{opacity:0}
-.notif-fade-enter-from .notif-card,.notif-fade-leave-to .notif-card{transform:scale(.9)}
-.notif-fade-enter-to .notif-card,.notif-fade-leave-from .notif-card{transform:scale(1)}
+.notif-fade-enter-from .notif-card,.notif-fade-leave-to .notif-card{transform:translateY(12px) scale(.97)}
+.notif-fade-enter-to .notif-card,.notif-fade-leave-from .notif-card{transform:translateY(0) scale(1)}
 
 </style>

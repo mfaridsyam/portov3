@@ -13,6 +13,17 @@
   <meta property="og:image" content="https://res.cloudinary.com/dnacoymkh/image/upload/v1772053322/logoweb_ztgy2d.jpg" />
   <link rel="icon" href="https://res.cloudinary.com/dnacoymkh/image/upload/v1772053322/logoweb_ztgy2d.jpg" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    document.addEventListener('contextmenu', function(e){ e.preventDefault() })
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'F12') { e.preventDefault(); return }
+      if (e.ctrlKey && e.shiftKey && ['c','C','i','I','j','J','k','K'].includes(e.key)) { e.preventDefault(); return }
+      if (e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return }
+    })
+    document.addEventListener('selectstart', function(e){
+      if (!e.target.closest('input,textarea')) e.preventDefault()
+    })
+  </script>
 </head>
 <body>
   <div id="app"></div>
