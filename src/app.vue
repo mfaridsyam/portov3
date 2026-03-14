@@ -25,9 +25,9 @@
     </header>
 
     <nav class="dots-nav" :class="{blight: LIGHT_SECS.includes(cur_sec)}">
-      <button v-for="(s,i) in SECTIONS" :key="s.id"
-        class="dnav-dot" :class="{active: cur_sec===i}"
-        @click="goTo(i)" :title="s.label">
+      <button v-for="(s,i) in visibleSections" :key="s.id"
+        class="dnav-dot" :class="{active: cur_sec===s.idx}"
+        @click="goTo(s.idx)" :title="s.label">
       </button>
     </nav>
 
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===2" key="photo" class="fp-slide bg-dk">
+        <div v-show="cur_sec===2 && isMobile" key="photo" class="fp-slide bg-dk">
           <div class="sec-photo">
             <div class="ph-img-wrap">
               <img src="https://res.cloudinary.com/dnacoymkh/image/upload/v1773393847/IMG_5533_vo5k7w.jpg" alt="Farid Syam"/>
@@ -349,6 +349,17 @@ const SECTIONS = [
 ]
 const LIGHT_SECS = []
 
+const isMobile = ref(false)
+function checkMobile() {
+  isMobile.value = window.matchMedia('(pointer:coarse) and (max-width:768px)').matches
+}
+
+const visibleSections = computed(() =>
+  SECTIONS
+    .map((s, i) => ({ ...s, idx: i }))
+    .filter(s => isMobile.value || s.id !== 'photo')
+)
+
 const loading = ref(true)
 const ldPct = ref(0)
 const cur_sec = ref(0)
@@ -372,8 +383,7 @@ function startLoad() {
 
 function goTo(idx) {
   if (going.value || idx === cur_sec.value) return
-  const isDesktop = window.matchMedia('(pointer:fine)').matches
-  if (isDesktop && idx === 2) {
+  if (!isMobile.value && idx === 2) {
     idx = idx > cur_sec.value ? 3 : 1
   }
   txName.value = idx > cur_sec.value ? 'slide-down' : 'slide-up'
@@ -384,15 +394,13 @@ function goTo(idx) {
 }
 
 function next() {
-  const isDesktop = window.matchMedia('(pointer:fine)').matches
   let target = cur_sec.value + 1
-  if (isDesktop && target === 2) target = 3
+  if (!isMobile.value && target === 2) target = 3
   if (target < SECTIONS.length) goTo(target)
 }
 function prev() {
-  const isDesktop = window.matchMedia('(pointer:fine)').matches
   let target = cur_sec.value - 1
-  if (isDesktop && target === 2) target = 1
+  if (!isMobile.value && target === 2) target = 1
   if (target >= 0) goTo(target)
 }
 
@@ -576,33 +584,28 @@ const experiences = [
   {name:'Panggilin',role:'Frontend Developer',period:'Jun 2021 – Mar 2022'},
 ]
 
-// ── Content Protection ──────────────────────────────────────────────────────
 function blockContextMenu(e) { e.preventDefault() }
 
 function blockSelectStart(e) {
-  // Allow selection inside contact form inputs/textarea
   if (e.target.closest('input, textarea')) return
   e.preventDefault()
 }
 
 function blockDevKeys(e) {
-  // Block F12
   if (e.key === 'F12') { e.preventDefault(); return }
-  // Block Ctrl+Shift+C / Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+K (DevTools)
   if (e.ctrlKey && e.shiftKey && ['c','C','i','I','j','J','k','K'].includes(e.key)) {
     e.preventDefault(); return
   }
-  // Block Ctrl+U (view source)
   if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return }
-  // Block Ctrl+S (save page)
   if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return }
-  // Block Ctrl+A (select all) — outside form
   if (e.ctrlKey && (e.key === 'a' || e.key === 'A')) {
     if (!e.target.closest('input, textarea')) e.preventDefault()
   }
 }
 
 onMounted(() => {
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
   startLoad()
   window.addEventListener('mousemove', onMouse, {passive:true})
   window.addEventListener('keydown', onKey)
@@ -622,6 +625,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   cancelAnimationFrame(ldRaf)
+  window.removeEventListener('resize', checkMobile)
   window.removeEventListener('mousemove', onMouse)
   window.removeEventListener('keydown', onKey)
   window.removeEventListener('keydown', blockDevKeys)
@@ -731,7 +735,7 @@ body{cursor:none}
 .dots-nav.blight .dnav-dot.active{background:var(--acc)}
 
 .mob-nav{display:none}
-@media(pointer:coarse){
+@media(pointer:coarse) and (max-width:768px){
   .mob-nav{display:flex;flex-direction:column;gap:.4rem;position:fixed;right:1rem;bottom:6rem;z-index:802;align-items:center}
   .mob-nav-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(232,229,223,.22);background:rgba(20,20,20,.65);backdrop-filter:blur(8px);color:rgba(232,229,223,.75);font-size:.72rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent}
   .mob-nav-btn:active{transform:scale(.9)}
@@ -897,7 +901,7 @@ blockquote{border-left:2px solid var(--acc);padding:.35rem .8rem;font-style:ital
 .sum-lbl{font-size:clamp(1.1rem,2vw,1.6rem);font-weight:700;color:var(--tx);text-decoration:underline;text-underline-offset:5px;margin-bottom:.9rem;display:block;font-family:var(--san)}
 .sum-name{font-family:var(--san);font-size:clamp(2.2rem,5.5vw,5.5rem);font-weight:800;color:var(--tx);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;white-space:nowrap}
 @media(max-width:900px){.sum-name{font-size:clamp(2rem,6vw,4rem);white-space:normal;line-height:.95}}
-@media(max-width:700px){.sum-name{font-size:clamp(1.9rem,8vw,3.2rem);line-height:1;white-space:normal}}
+@media(max-width:700px){.sum-name{font-size:clamp(1.8rem,8vw,3.2rem);line-height:1;white-space:normal}}
 .sum-role{font-size:.82rem;color:var(--txd);margin-bottom:.9rem}
 .sum-bio{font-size:clamp(.85rem,1.2vw,.95rem);line-height:1.85;color:var(--txd);max-width:100%;text-align:justify}
 .sum-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.5rem 3rem;border-top:1px solid var(--bdr);padding-top:2.5rem;margin-top:2.5rem}
