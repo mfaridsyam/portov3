@@ -250,10 +250,10 @@
               <form class="ctform" @submit.prevent="send" novalidate>
                 <input type="text" id="hp" tabindex="-1" style="position:absolute;left:-9999px;opacity:0"/>
                 <div class="cfrow">
-                  <div class="cff"><label>Name</label><input v-model="form.name" placeholder="Muhammad Farid Syam" :disabled="sending"/></div>
-                  <div class="cff"><label>Email</label><input v-model="form.email" type="email" placeholder="hello@example.com" :disabled="sending"/></div>
+                  <div class="cff"><label>Name</label><input v-model="form.name" placeholder="Your Name" :disabled="sending"/></div>
+                  <div class="cff"><label>Email</label><input v-model="form.email" type="email" placeholder="youremail@example.com" :disabled="sending"/></div>
                 </div>
-                <div class="cff"><label>Message</label><textarea v-model="form.message" placeholder="Tell me about your project..." rows="4" :disabled="sending"></textarea></div>
+                <div class="cff"><label>Message</label><textarea v-model="form.message" placeholder="Your Message..." rows="4" :disabled="sending"></textarea></div>
                 <button type="submit" :disabled="sending" class="cfbtn">
                   <span>{{ sending ? 'Sending…' : 'Send Message' }}</span>
                   <i :class="sending?'fas fa-spinner fa-spin':'fas fa-arrow-right'"></i>
