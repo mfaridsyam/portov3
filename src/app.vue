@@ -78,7 +78,7 @@
               </div>
               <div class="ab-txt">
                 <span class="ab-tag">WHO I AM</span>
-                <h2 class="ab-name"><span class="ab-fn">Muhammad</span><span class="ab-ln">Farid Syam</span></h2>
+                <h2 class="ab-name"><span class="ab-fn">Muhammad Farid Syam</span></h2>
                 <p class="ab-bio">I'm a <strong>UI/UX Designer</strong> and <strong>Frontend Developer</strong> based in West Sulawesi, Indonesia — someone who believes great digital products are built where thoughtful design meets clean code. With a foundation in Informatics Engineering, I've spent the past two years shaping user experiences in Figma and bringing them to life with JavaScript. Right now, I'm deepening my craft in the Vue.js ecosystem, turning ideas into interfaces that are not just functional, but genuinely enjoyable to use.</p>
                 <div class="ab-bottom">
                   <blockquote>"Design with soul, develop with logic."</blockquote>
@@ -181,8 +181,8 @@
                   <h3 class="scolh">Education</h3>
                   <div class="sitems">
                     <div class="sitem">
-                      <div class="simt">Informatics Engineering</div>
-                      <div class="simd"><span>Universitas Al Asyariah Mandar</span><span class="sdot">·</span><span>3.53/4.00</span></div>
+                      <div class="simt">Informatics Engineering (Bachelor)</div>
+                      <div class="simd"><span>Al Asyariah Mandar University</span><span class="sdot">·</span><span>3.53/4.00</span></div>
                     </div>
                   </div>
                 </div>
@@ -233,10 +233,10 @@
               <form class="ctform" @submit.prevent="send" novalidate>
                 <input type="text" id="hp" tabindex="-1" style="position:absolute;left:-9999px;opacity:0"/>
                 <div class="cfrow">
-                  <div class="cff"><label>Name</label><input v-model="form.name" placeholder="Muhammad Farid Syam" :disabled="sending"/></div>
-                  <div class="cff"><label>Email</label><input v-model="form.email" type="email" placeholder="hello@example.com" :disabled="sending"/></div>
+                  <div class="cff"><label>Name</label><input v-model="form.name" placeholder="Your Name" :disabled="sending"/></div>
+                  <div class="cff"><label>Email</label><input v-model="form.email" type="email" placeholder="youremail@example.com" :disabled="sending"/></div>
                 </div>
-                <div class="cff"><label>Message</label><textarea v-model="form.message" placeholder="Tell me about your project..." rows="4" :disabled="sending"></textarea></div>
+                <div class="cff"><label>Message</label><textarea v-model="form.message" placeholder="Your Message..." rows="4" :disabled="sending"></textarea></div>
                 <button type="submit" :disabled="sending" class="cfbtn">
                   <span>{{ sending ? 'Sending…' : 'Send Message' }}</span>
                   <i :class="sending?'fas fa-spinner fa-spin':'fas fa-arrow-right'"></i>
