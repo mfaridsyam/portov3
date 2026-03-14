@@ -7,24 +7,24 @@ export const techStack = [
   { name: "Firebase",        category: "Backend & Hosting",    iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053315/firebased_phoxgj.png",iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053313/firebase_xwj9qz.png" },
   { name: "Figma",           category: "UI / UX Design",       iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053310/figmad_rpiakb.png",   iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053310/figma_uulqls.png" },
   { name: "Canva",           category: "Design Tool",          iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053352/canvad_voan4u.png",   iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053349/canva_e7decv.png" },
-  { name: "Adobe Lightroom", category: "Photo Editing",        iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053332/lrd_cbbljl.png",     iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053329/lr_tbbdcb.png" },
-  { name: "Microsoft Word",  category: "Office Productivity",  iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053347/wordd_omwuzc.png",   iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053344/word_rv8lfc.png" },
-  { name: "Microsoft Excel", category: "Office Productivity",  iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053368/exceld_sckyuz.png",  iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053365/excel_cz8tcd.png" },
+  { name: "Lightroom", category: "Photo Editing",        iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053332/lrd_cbbljl.png",     iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053329/lr_tbbdcb.png" },
+  { name: "Word",  category: "Office Productivity",  iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053347/wordd_omwuzc.png",   iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053344/word_rv8lfc.png" },
+  { name: "Excel", category: "Office Productivity",  iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053368/exceld_sckyuz.png",  iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053365/excel_cz8tcd.png" },
   { name: "PowerPoint",      category: "Office Productivity",  iconLight: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053337/pwpd_f6cyfk.png",    iconDark: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772053334/pwp_si1iml.png" }
 ]
 
 export const certificates = [
   { title: "Figma for UI/UX Design", issuer: "MySkill - Skill Specialization",       date: "2026", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046386/figmaforui-uxdesign_egeno8.jpg"] },
+  { title: "Digital Representative", issuer: "MAGENTA & PT Pegadaian",               date: "2025", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046378/magenta_sqgzcc.jpg","https://res.cloudinary.com/dnacoymkh/image/upload/v1772046380/magenta1_ku23df.jpg"] },
   { title: "Fundamental UI Design",  issuer: "Coding Studio",                        date: "2025", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046389/fundamental-ui_apkyoz.jpg"] },
   { title: "Fundamental UX Design",  issuer: "Coding Studio",                        date: "2025", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046384/fundamental-ux_blrsyo.jpg"] },
-  { title: "Digital Representative", issuer: "MAGENTA & PT Pegadaian",               date: "2025", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046378/magenta_sqgzcc.jpg","https://res.cloudinary.com/dnacoymkh/image/upload/v1772046380/magenta1_ku23df.jpg"] },
-  { title: "Microsoft Office",       issuer: "Kursus Digital & LKP Borju Komputer",  date: "2024", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046388/office_qbmp9v.png"] },
-  { title: "Toefl Prediction",       issuer: "Global Operation Indonesia",            date: "2025", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772047391/toeflp_aebj3n.jpg"] }
+  { title: "Toefl Prediction",       issuer: "Global Operation Indonesia",            date: "2025", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772047391/toeflp_aebj3n.jpg"] },
+  { title: "Microsoft Office",       issuer: "Kursus Digital & LKP Borju Komputer",  date: "2024", images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046388/office_qbmp9v.png"] }
 ]
 
 export const projects = [
   {
-    title: "Personal Portfolio",
+    title: "Personal Portfolio V.1",
     desc:  "A professional portfolio website designed and developed to showcase my creative profile, technical skills, and latest projects.",
     image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772045888/portfolio_gs14uu.png",
     badges: ["UI/UX Design", "Web Development"],
@@ -114,11 +114,6 @@ export const projects = [
 ]
 
 export const playlist = [
-  { title: "BOO – H3ADBAND",             src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1772042090/H3ADBAND_-_BOO_Bass_Boosted_qg6gc5.mp3" },
-  { title: "Berubah – Tenxi Jemsii",     src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1767162712/TenxiJemsii-Berubah_cjdfyf.mp3" },
-  { title: "Bintang 5 – Tenxii Remix",   src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1767162750/Tenxii-Bintang5_ilfc8r.mp3" },
-  { title: "Tabola Bale – Silet Open Up", src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1767162714/SiletOpenUp-TabolaBale_nuotw9.mp3" },
-  { title: "Alamak – Rizky Febian",      src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1767162722/RizkyFebian-Alamak_yiohla.mp3" },
-  { title: "Teruntuk Mia – Nuh",         src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1767162721/Nuh-TeruntukMia_uggo8r.mp3" },
-  { title: "Monitor Ketua – Ecko Show",  src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1767162707/EckoShow-TorMonitor_rl55yh.mp3" }
+  { title: "Ransom – Lil Tecca",     src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1773480903/Lil_Tecca_-_Ransom_xig9cq.mp3" },
+  { title: "BOO – H3ADBAND",             src: "https://res.cloudinary.com/dnacoymkh/video/upload/v1772042090/H3ADBAND_-_BOO_Bass_Boosted_qg6gc5.mp3" }
 ]

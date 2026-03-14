@@ -7,7 +7,7 @@
       <div class="ld-prog"><div class="ld-fill" :style="{width:ldPct+'%'}"></div></div>
       <div class="ld-cnt">
         <span class="ld-tag">LOADING</span>
-        <div class="ld-name">MFaridS</div>
+        <div class="ld-name glitch-text" data-text="MFaridS">MFaridS</div>
         <span class="ld-sub">UI/UX Designer &amp; Frontend Developer</span>
       </div>
     </div>
@@ -18,10 +18,10 @@
       <span class="bar-l">M. Farid Syam</span>
       <button class="bar-music" @click="toggleMusic">
         <span class="bmdot" :class="{bmon: musicOn}"></span>
-        <span>BOO – H3ADBAND</span>
+        <span>{{ currentTrackTitle }}</span>
         <span v-if="musicOn" class="bmbars"><i></i><i></i><i></i></span>
       </button>
-      <audio ref="aud" :src="booSrc" loop preload="auto"></audio>
+      <audio ref="aud" preload="auto" @ended="onTrackEnded"></audio>
     </header>
 
     <nav class="dots-nav" :class="{blight: LIGHT_SECS.includes(cur_sec)}">
@@ -31,6 +31,16 @@
       </button>
     </nav>
 
+    <!-- Mobile only arrow navigation -->
+    <div class="mob-nav">
+      <button class="mob-nav-btn" @click="prev" :disabled="cur_sec===0" :class="{disabled: cur_sec===0}">
+        <i class="fas fa-chevron-up"></i>
+      </button>
+      <button class="mob-nav-btn" @click="next" :disabled="cur_sec===SECTIONS.length-1" :class="{disabled: cur_sec===SECTIONS.length-1}">
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+
     <div class="fp-viewport" ref="vpRef"
       @touchstart.passive="onTouchStart"
       @touchend.passive="onTouchEnd">
@@ -38,10 +48,10 @@
 
         <div v-show="cur_sec===0" key="hero" class="fp-slide bg-dk">
           <div class="sec-hero">
-            <div class="hero-letters">
-              <span class="hlf">F</span>
+            <div class="hero-letters glitch-letters">
+              <span class="hlf glitch-text" data-text="F">F</span>
               <span class="hldot"></span>
-              <span class="hls">S</span>
+              <span class="hls glitch-text" data-text="S">S</span>
             </div>
             <div class="cue">
               <div class="cue-m"><div class="cue-d"></div></div>
@@ -62,12 +72,21 @@
             <div class="ilines">
               <div class="il">Let Me Introduce</div>
               <div class="il">My Self</div>
-              <div class="il il-role">As <span class="role-wrap"><span v-for="(ch, ci) in padded" :key="ci" class="role-ch" :class="{settled: ch.settled, inactive: !ch.active}">{{ ch.display }}</span></span></div>
+              <div class="il il-role">As <span class="role-wrap"><span class="role-blur" :key="roleIdx">{{ roles[roleIdx] }}</span></span></div>
             </div>
           </div>
         </div>
 
-        <div v-show="cur_sec===2" key="about" class="fp-slide bg-dk">
+        <!-- Photo section: mobile only between intro and about -->
+        <div v-show="cur_sec===2" key="photo" class="fp-slide bg-dk">
+          <div class="sec-photo">
+            <div class="ph-img-wrap">
+              <img src="https://res.cloudinary.com/dnacoymkh/image/upload/v1773393847/IMG_5533_vo5k7w.jpg" alt="Farid Syam"/>
+            </div>
+          </div>
+        </div>
+
+        <div v-show="cur_sec===3" key="about" class="fp-slide bg-dk">
           <div class="sec-about">
             <div class="ab-marq">
               <div class="ab-track"><span v-for="n in 8" :key="n">— ABOUT ME </span></div>
@@ -93,7 +112,7 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===3" key="work" class="fp-slide bg-dk">
+        <div v-show="cur_sec===4" key="work" class="fp-slide bg-dk">
           <div class="sec-list">
             <div class="sl-inner">
               <div class="slhd">
@@ -106,7 +125,7 @@
                   @click="openProj(p)" @mouseenter="hovP=p" @mouseleave="hovP=null">
                   <span class="slrn">{{ String(j+1).padStart(2,'0') }}</span>
                   <span class="slrt">{{ p.title }}</span>
-                  <span class="slrc">{{ p.badges[0] }}</span>
+                  <span class="slrc">{{ p.badges.join(' & ') }}</span>
                   <span class="slra">—</span>
                 </div>
               </div>
@@ -120,7 +139,7 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===4" key="certs" class="fp-slide bg-dk">
+        <div v-show="cur_sec===5" key="certs" class="fp-slide bg-dk">
           <div class="sec-list sec-list-dk">
             <div class="sl-inner">
               <div class="slhd">
@@ -147,7 +166,7 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===5" key="tech" class="fp-slide bg-dk">
+        <div v-show="cur_sec===6" key="tech" class="fp-slide bg-dk">
           <div class="sec-list">
             <div class="sl-inner">
               <div class="slhd">
@@ -167,7 +186,7 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===6" key="summary" class="fp-slide bg-dk">
+        <div v-show="cur_sec===7" key="summary" class="fp-slide bg-dk">
           <div class="sec-summary">
             <div class="sl-inner">
               <div class="sum-hd">
@@ -209,12 +228,12 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===7" key="phrase" class="fp-slide bg-dk">
+        <div v-show="cur_sec===8" key="phrase" class="fp-slide bg-dk">
           <div class="sec-phrase">
             <div class="ph-inner">
               <p class="phsm">Dont Be Shy,</p>
               <h2 class="phbig">Make The First<br>Move.</h2>
-              <div class="ph-cta" @click="goTo(8)">
+              <div class="ph-cta" @click="goTo(9)">
                 <span>Get In Touch</span>
                 <span class="ph-arr">↓</span>
               </div>
@@ -222,7 +241,7 @@
           </div>
         </div>
 
-        <div v-show="cur_sec===8" key="contact" class="fp-slide bg-dk">
+        <div v-show="cur_sec===9" key="contact" class="fp-slide bg-dk">
           <div class="sec-contact">
             <div class="sl-inner ct-inner">
               <div class="cthd">
@@ -233,10 +252,10 @@
               <form class="ctform" @submit.prevent="send" novalidate>
                 <input type="text" id="hp" tabindex="-1" style="position:absolute;left:-9999px;opacity:0"/>
                 <div class="cfrow">
-                  <div class="cff"><label>Name</label><input v-model="form.name" placeholder="Your Name" :disabled="sending"/></div>
-                  <div class="cff"><label>Email</label><input v-model="form.email" type="email" placeholder="youremail@example.com" :disabled="sending"/></div>
+                  <div class="cff"><label>Name</label><input v-model="form.name" placeholder="Muhammad Farid Syam" :disabled="sending"/></div>
+                  <div class="cff"><label>Email</label><input v-model="form.email" type="email" placeholder="hello@example.com" :disabled="sending"/></div>
                 </div>
-                <div class="cff"><label>Message</label><textarea v-model="form.message" placeholder="Your Message..." rows="4" :disabled="sending"></textarea></div>
+                <div class="cff"><label>Message</label><textarea v-model="form.message" placeholder="Tell me about your project..." rows="4" :disabled="sending"></textarea></div>
                 <button type="submit" :disabled="sending" class="cfbtn">
                   <span>{{ sending ? 'Sending…' : 'Send Message' }}</span>
                   <i :class="sending?'fas fa-spinner fa-spin':'fas fa-arrow-right'"></i>
@@ -291,10 +310,18 @@
           </div>
         </div>
       </Transition>
-      <Transition name="toast">
-        <div v-if="toast.on" class="toast" :class="toast.t">
-          <i :class="toast.t==='ok'?'fas fa-check-circle':'fas fa-times-circle'"></i>
-          <div><strong>{{ toast.ttl }}</strong><p>{{ toast.msg }}</p></div>
+      <Transition name="notif-fade">
+        <div v-if="toast.on" class="notif-overlay" @click.self="toast.on=false">
+          <div class="notif-card">
+            <button class="notif-close" @click="toast.on=false"><i class="fas fa-times"></i></button>
+            <div class="notif-icon" :class="{error: toast.t==='err'}">
+              <i :class="toast.t==='ok' ? 'fas fa-check' : 'fas fa-exclamation'"></i>
+            </div>
+            <div class="notif-msg">
+              <h4>{{ toast.ttl }}</h4>
+              <p>{{ toast.msg }}</p>
+            </div>
+          </div>
         </div>
       </Transition>
     </Teleport>
@@ -313,6 +340,7 @@ const yr = new Date().getFullYear()
 const SECTIONS = [
   {id:'hero',    label:'Hero'},
   {id:'intro',   label:'Intro'},
+  {id:'photo',   label:'Photo'},
   {id:'about',   label:'About'},
   {id:'work',    label:'Projects'},
   {id:'certs',   label:'Certificates'},
@@ -346,6 +374,11 @@ function startLoad() {
 
 function goTo(idx) {
   if (going.value || idx === cur_sec.value) return
+  // Skip photo section (idx=2) on desktop (non-touch)
+  const isDesktop = window.matchMedia('(pointer:fine)').matches
+  if (isDesktop && idx === 2) {
+    idx = idx > cur_sec.value ? 3 : 1
+  }
   txName.value = idx > cur_sec.value ? 'slide-down' : 'slide-up'
   going.value = true
   cur_sec.value = idx
@@ -353,12 +386,22 @@ function goTo(idx) {
   setTimeout(() => { going.value = false }, 820)
 }
 
-function next() { if (cur_sec.value < SECTIONS.length-1) goTo(cur_sec.value+1) }
-function prev() { if (cur_sec.value > 0) goTo(cur_sec.value-1) }
+function next() {
+  const isDesktop = window.matchMedia('(pointer:fine)').matches
+  let target = cur_sec.value + 1
+  if (isDesktop && target === 2) target = 3
+  if (target < SECTIONS.length) goTo(target)
+}
+function prev() {
+  const isDesktop = window.matchMedia('(pointer:fine)').matches
+  let target = cur_sec.value - 1
+  if (isDesktop && target === 2) target = 1
+  if (target >= 0) goTo(target)
+}
 
 function getScrollableEl() {
-  if (cur_sec.value === 3 && workListRef.value) return workListRef.value
-  if (cur_sec.value === 4 && certListRef.value) return certListRef.value
+  if (cur_sec.value === 4 && workListRef.value) return workListRef.value
+  if (cur_sec.value === 5 && certListRef.value) return certListRef.value
   return null
 }
 
@@ -374,7 +417,7 @@ function onWheel(e) {
     if (e.deltaY < 0 && !atTop) { el.scrollTop += e.deltaY * 0.8; return }
   }
   // Handle summary section internal scroll
-  const summaryEl = cur_sec.value === 6 ? document.querySelector('.sec-summary') : null
+  const summaryEl = cur_sec.value === 7 ? document.querySelector(".sec-summary") : null
   if (summaryEl) {
     const atTop = summaryEl.scrollTop <= 2
     const atBot = summaryEl.scrollTop + summaryEl.clientHeight >= summaryEl.scrollHeight - 4
@@ -392,16 +435,26 @@ function onWheel(e) {
 
 // Touch: require 2 swipes on ALL sections on mobile to navigate
 let touchY0 = 0, touchX0 = 0, touchSwipeCount = 0, lastSwipeSec = -1
+let touchInList = false
+
 function onTouchStart(e) {
   touchY0 = e.touches[0].clientY
   touchX0 = e.touches[0].clientX
+  // Check if touch started inside a scrollable list
+  touchInList = !!e.target.closest('.slrows')
   // Try to play music on first user touch (mobile autoplay policy)
   if (!musicPlayed) { musicPlayed = true; tryPlay() }
 }
+
 function onTouchEnd(e) {
   if (going.value) return
+
   const dy = touchY0 - e.changedTouches[0].clientY
   const dx = Math.abs(touchX0 - e.changedTouches[0].clientX)
+
+  // If touch started inside list, never navigate — list handles its own scroll
+  if (touchInList) { touchInList = false; return }
+
   if (dx > Math.abs(dy) || Math.abs(dy) < 40) return
 
   const el = getScrollableEl()
@@ -413,7 +466,7 @@ function onTouchEnd(e) {
   }
 
   // Summary section: check internal scroll
-  const summaryEl = cur_sec.value === 6 ? document.querySelector('.sec-summary') : null
+  const summaryEl = cur_sec.value === 7 ? document.querySelector(".sec-summary") : null
   if (summaryEl) {
     const atTop = summaryEl.scrollTop <= 2
     const atBot = summaryEl.scrollTop + summaryEl.clientHeight >= summaryEl.scrollHeight - 4
@@ -422,7 +475,7 @@ function onTouchEnd(e) {
   }
 
   // About section mobile: check internal scroll
-  const aboutEl = cur_sec.value === 2 ? document.querySelector('.ab-body') : null
+  const aboutEl = cur_sec.value === 3 ? document.querySelector('.ab-body') : null
   if (aboutEl) {
     const atTop = aboutEl.scrollTop <= 2
     const atBot = aboutEl.scrollTop + aboutEl.clientHeight >= aboutEl.scrollHeight - 4
@@ -460,92 +513,39 @@ const roles = ['UI/UX Designer', 'Frontend Developer']
 const roleIdx = ref(0)
 let roleTimer = null
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-function rndChar() { return CHARS[Math.floor(Math.random() * CHARS.length)] }
-
-const longestRole = roles.reduce((a, b) => a.length > b.length ? a : b)
-
-const scrambledChars = ref(
-  roles[0].split('').map(ch => ({ display: ch === ' ' ? '\u00A0' : ch, settled: true, visible: true }))
-)
-
-const padded = ref(
-  Array.from({ length: longestRole.length }, (_, i) => ({
-    display: i < roles[0].length ? (roles[0][i] === ' ' ? '\u00A0' : roles[0][i]) : '\u00A0',
-    settled: true,
-    active: i < roles[0].length
-  }))
-)
-
-let scrambleId = 0
-function scrambleTo(target) {
-  const id = ++scrambleId
-  const targetArr = target.split('')
-
-  padded.value = padded.value.map((_, i) => ({
-    display: i < padded.value.length ? padded.value[i].display : '\u00A0',
-    settled: false,
-    active: i < targetArr.length
-  }))
-
-  for (let i = 0; i < longestRole.length; i++) {
-    const targetChar = i < targetArr.length ? targetArr[i] : null
-    const delay = i * 55
-    const duration = 280
-    const t0 = performance.now()
-
-    ;(function animChar(idx) {
-      function tick(now) {
-        if (scrambleId !== id) return
-        const elapsed = now - t0
-        if (elapsed < delay) { requestAnimationFrame(tick); return }
-        const progress = elapsed - delay
-        if (progress < duration) {
-          if (padded.value[idx] && targetChar !== null) {
-            padded.value[idx].display = rndChar()
-            padded.value[idx].active = true
-          } else if (padded.value[idx]) {
-            padded.value[idx].display = '\u00A0'
-            padded.value[idx].active = false
-          }
-          requestAnimationFrame(tick)
-        } else {
-          if (padded.value[idx]) {
-            if (targetChar !== null) {
-              padded.value[idx].display = targetChar === ' ' ? '\u00A0' : targetChar
-              padded.value[idx].settled = true
-              padded.value[idx].active = true
-            } else {
-              padded.value[idx].display = '\u00A0'
-              padded.value[idx].settled = true
-              padded.value[idx].active = false
-            }
-          }
-        }
-      }
-      requestAnimationFrame(tick)
-    })(i)
-  }
-}
-
 function cycleRole() {
   roleIdx.value = (roleIdx.value + 1) % roles.length
-  scrambleTo(roles[roleIdx.value])
 }
 
 const aud = ref(null)
 const musicOn = ref(false)
-const booSrc = playlist[0].src
+const currentTrackIdx = ref(0)
+const currentTrackTitle = computed(() => playlist[currentTrackIdx.value]?.title || '')
 let musicPlayed = false
+
+function loadTrack(idx) {
+  if (!aud.value) return
+  currentTrackIdx.value = idx
+  aud.value.src = playlist[idx].src
+  aud.value.volume = 0.6
+}
 function tryPlay() {
   if (!aud.value) return
+  if (!aud.value.src || aud.value.src === window.location.href) loadTrack(0)
   aud.value.volume = 0.6
   aud.value.play().then(() => { musicOn.value = true }).catch(() => {})
 }
 function toggleMusic() {
   if (!aud.value) return
   if (musicOn.value) { aud.value.pause(); musicOn.value = false }
-  else { aud.value.volume = 0.6; aud.value.play(); musicOn.value = true }
+  else { aud.value.volume = 0.6; aud.value.play().then(() => { musicOn.value = true }).catch(() => {}) }
+}
+function onTrackEnded() {
+  const next = (currentTrackIdx.value + 1) % playlist.length
+  loadTrack(next)
+  if (musicOn.value) {
+    aud.value.play().catch(() => {})
+  }
 }
 
 const actProj = ref(null), actCert = ref(null), ci = ref(0)
@@ -571,11 +571,11 @@ async function send() {
       message: form.message,
       reply_to: form.email
     })
-    showToast('ok', 'Sent!', "I'll get back to you soon.")
+    showToast('ok', 'Message Sent!', "I'll get back to you as soon as possible.")
     Object.assign(form, {name:'', email:'', message:''})
   } catch(err) {
     console.error('EmailJS error:', err)
-    showToast('err', 'Failed', 'Please check your connection and try again.')
+    showToast('err', 'Failed to Send', 'Something went wrong. Please try again or contact me directly.')
   } finally {
     sending.value = false
   }
@@ -638,8 +638,57 @@ body{cursor:none}
 .ld-tag{font-size:.5rem;letter-spacing:7px;text-transform:uppercase;color:rgba(232,229,223,.2)}
 .ld-name{font-family:'PolySans',var(--san);font-size:clamp(3rem,10vw,7rem);font-weight:400;color:var(--tx);letter-spacing:-.02em;line-height:1}
 .ld-sub{font-size:.56rem;letter-spacing:3px;color:rgba(232,229,223,.2)}
-.ldfade-leave-active{transition:opacity .45s,transform .45s}
-.ldfade-leave-to{opacity:0;transform:scale(1.03)}
+
+.glitch-text{position:relative;display:inline-block}
+.glitch-text::before,.glitch-text::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}
+
+/* ld-name: clean glitch, starts immediately, repeats every 2.5s */
+.ld-name.glitch-text::before{color:#289DF2;animation:ldGlitchA 2.5s infinite;clip-path:polygon(0 10%,100% 10%,100% 38%,0 38%)}
+.ld-name.glitch-text::after{color:#ff4d8d;animation:ldGlitchB 2.5s infinite;clip-path:polygon(0 58%,100% 58%,100% 82%,0 82%)}
+@keyframes ldGlitchA{
+  0%{transform:translate(-4px,0);opacity:1}
+  4%{transform:translate(3px,0);opacity:1}
+  8%{transform:none;opacity:0}
+  40%{opacity:0}
+  42%{transform:translate(-3px,1px);opacity:1}
+  46%{transform:translate(4px,0);opacity:0}
+  100%{opacity:0}
+}
+@keyframes ldGlitchB{
+  0%{transform:translate(4px,0);opacity:1}
+  4%{transform:translate(-3px,0);opacity:1}
+  8%{transform:none;opacity:0}
+  40%{opacity:0}
+  42%{transform:translate(3px,-1px);opacity:1}
+  46%{transform:translate(-4px,0);opacity:0}
+  100%{opacity:0}
+}
+
+/* hlf/hls: periodic glitch every 4s */
+.hlf.glitch-text::before,.hls.glitch-text::before{color:#289DF2;animation:glitchA 4s infinite;clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%)}
+.hlf.glitch-text::after,.hls.glitch-text::after{color:#ff4d8d;animation:glitchB 4s infinite;clip-path:polygon(0 55%,100% 55%,100% 78%,0 78%)}
+@keyframes glitchA{
+  0%,85%{transform:none;opacity:0}
+  86%{transform:translate(-5px,1px);opacity:1}
+  87%{transform:translate(4px,-2px);opacity:1}
+  88%{transform:translate(-3px,2px);opacity:0}
+  89%{transform:translate(5px,0);opacity:1}
+  90%,100%{transform:none;opacity:0}
+}
+@keyframes glitchB{
+  0%,87%{transform:none;opacity:0}
+  88%{transform:translate(5px,-1px);opacity:1}
+  89%{transform:translate(-4px,2px);opacity:1}
+  90%{transform:translate(3px,-1px);opacity:0}
+  91%{transform:translate(-5px,0);opacity:1}
+  92%,100%{transform:none;opacity:0}
+}
+
+.hero-letters{display:flex;align-items:center;user-select:none}
+.hlf,.hls{font-family:var(--ser);font-size:clamp(8rem,28vw,22rem);font-weight:400;color:var(--tx);line-height:.88;display:inline-block}
+.hldot{width:clamp(14px,2.5vw,32px);height:clamp(14px,2.5vw,32px);border-radius:50%;background:var(--acc);flex-shrink:0;margin:0 clamp(3px,.6vw,8px);align-self:flex-end;margin-bottom:clamp(8px,1.8vw,24px)}
+
+.sec-hero{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 
 .fp-wrap{position:fixed;inset:0;display:flex;flex-direction:column}
 .bar{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:.85rem 4%;font-size:.58rem;letter-spacing:1.5px;color:rgba(232,229,223,.38);transition:color .35s,background .35s}
@@ -657,10 +706,19 @@ body{cursor:none}
 
 .dots-nav{position:fixed;right:1.6rem;top:50%;transform:translateY(-50%);z-index:801;display:flex;flex-direction:column;gap:.55rem}
 .dnav-dot{width:6px;height:6px;border-radius:50%;border:none;background:rgba(232,229,223,.2);cursor:none;transition:all .3s;padding:0}
-@media(pointer:coarse){.dnav-dot{cursor:pointer;width:10px;height:10px}}
+@media(pointer:coarse){.dnav-dot{cursor:pointer;width:8px;height:8px}}
 .dnav-dot.active{background:var(--acc);transform:scale(1.4)}
 .dots-nav.blight .dnav-dot{background:rgba(26,26,26,.22)}
 .dots-nav.blight .dnav-dot.active{background:var(--acc)}
+
+.mob-nav{display:none}
+@media(pointer:coarse){
+  .mob-nav{display:flex;flex-direction:column;gap:.4rem;position:fixed;right:1rem;bottom:6rem;z-index:802;align-items:center}
+  .mob-nav-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(232,229,223,.22);background:rgba(20,20,20,.65);backdrop-filter:blur(8px);color:rgba(232,229,223,.75);font-size:.72rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent}
+  .mob-nav-btn:active{transform:scale(.9)}
+  .mob-nav-btn:not(.disabled){border-color:rgba(232,229,223,.3);color:rgba(232,229,223,.9)}
+  .mob-nav-btn.disabled{opacity:.2;pointer-events:none}
+}
 
 .fp-viewport{flex:1;position:relative;overflow:hidden;touch-action:pan-y}
 .fp-slider{position:relative;width:100%;height:100%}
@@ -690,25 +748,34 @@ body{cursor:none}
 @keyframes swpulse{0%,100%{opacity:.15;transform:translateY(4px)}50%{opacity:.9;transform:translateY(0)}}
 .swipe-lbl{font-size:.44rem;letter-spacing:5px;text-transform:uppercase;color:rgba(232,229,223,.2);margin-top:4px}
 
-.sec-hero{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.hero-letters{display:flex;align-items:center;user-select:none}
-.hlf,.hls{font-family:var(--ser);font-size:clamp(8rem,28vw,22rem);font-weight:400;color:var(--tx);line-height:.88;display:inline-block}
-.hldot{width:clamp(14px,2.5vw,32px);height:clamp(14px,2.5vw,32px);border-radius:50%;background:var(--acc);flex-shrink:0;margin:0 clamp(3px,.6vw,8px);align-self:flex-end;margin-bottom:clamp(8px,1.8vw,24px)}
+.ldfade-leave-active{transition:opacity .45s,transform .45s}
+.ldfade-leave-to{opacity:0;transform:scale(1.03)}
 
 .sec-intro{height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .ilines{display:flex;flex-direction:column;align-items:flex-start;padding:0 5%;gap:.5rem;width:100%;max-width:1100px;margin:0 auto;flex-shrink:0}
 .il{font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;color:var(--tx);line-height:1.1;white-space:nowrap}
 @media(max-width:600px){.il{white-space:normal;font-size:clamp(1.9rem,8.5vw,3.5rem)}}
-.il-role{display:flex;align-items:baseline;gap:.22em;white-space:nowrap}
+.il-role{display:flex;align-items:center;gap:.22em;white-space:nowrap}
 @media(max-width:600px){.il-role{white-space:nowrap;overflow:hidden}}
-.role-wrap{display:inline-flex;font-style:italic;font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;line-height:1.1;white-space:nowrap;overflow:hidden}
+.role-wrap{display:inline-block;font-style:italic;font-family:var(--ser);font-size:clamp(2rem,6.5vw,6.5rem);font-weight:400;line-height:1.1;white-space:nowrap}
 @media(max-width:600px){.role-wrap{font-size:clamp(1.6rem,7.5vw,3rem)}}
-.role-ch{display:inline-block;color:var(--acc);font-style:italic;transition:color .1s ease}
-.role-ch.settled{color:var(--acc)}
-.role-ch:not(.settled).active{color:rgba(40,157,242,.4)}
-.role-ch.inactive{visibility:hidden;pointer-events:none}
+.role-blur{display:inline-block;color:var(--acc);white-space:nowrap;animation:blurIn .55s ease forwards}
+@keyframes blurIn{
+  0%{filter:blur(12px);opacity:0}
+  100%{filter:blur(0);opacity:1}
+}
 
+.sec-photo{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:4rem 2rem 2rem;gap:1.5rem}
+.ph-img-wrap{width:min(320px,82vw);aspect-ratio:3/4;border-radius:20px;overflow:hidden;border:1px solid var(--bdr);flex-shrink:0}
+.ph-img-wrap img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%)}
+.ph-img-info{text-align:center}
+.ph-img-name{font-family:var(--ser);font-size:clamp(1.6rem,7vw,2.4rem);font-weight:400;color:var(--tx);letter-spacing:-1px;margin-top:.5rem}
 .sec-about{height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.sec-photo{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:4rem 2rem 2rem;gap:1.5rem}
+.ph-img-wrap{width:min(320px,82vw);aspect-ratio:3/4;border-radius:20px;overflow:hidden;border:1px solid var(--bdr);flex-shrink:0}
+.ph-img-wrap img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%)}
+.ph-img-info{text-align:center}
+.ph-img-name{font-family:var(--ser);font-size:clamp(1.6rem,7vw,2.4rem);font-weight:400;color:var(--tx);letter-spacing:-1px;margin-top:.5rem}
 .ab-marq{overflow:hidden;position:absolute;bottom:0;left:0;right:0;padding:.5rem 0;z-index:1;pointer-events:none}
 .ab-track{display:flex;width:max-content;animation:marq 22s linear infinite}
 .ab-track span{font-family:var(--ser);font-size:clamp(2rem,4vw,3.8rem);color:rgba(232,229,223,.04);white-space:nowrap;padding:0 1.5rem;font-weight:400}
@@ -747,12 +814,13 @@ blockquote{border-left:2px solid var(--acc);padding:.35rem .8rem;font-style:ital
 
 .sec-list{height:100%;display:flex;align-items:center;overflow:hidden;position:relative}
 .sl-inner{max-width:1100px;margin:0 auto;padding:0 5%;width:100%;overflow:hidden}
+@media(max-width:700px){.sec-list{align-items:flex-start}.sl-inner{padding-top:5rem}}
 .slhd{margin-bottom:1.6rem}
 .slh2{font-family:var(--ser);font-size:clamp(1.8rem,4.5vw,4rem);font-weight:400;color:var(--tx);letter-spacing:-2px}
 .slh2-dk{color:var(--txdk)}
 .sltag{font-size:.52rem;letter-spacing:6px;text-transform:uppercase;color:rgba(232,229,223,.3);display:block;margin-bottom:.6rem}
 .sltag-lt{color:rgba(26,26,26,.3)}
-.slrows{border-top:1px solid var(--bdr);max-height:calc(100vh - 260px);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.slrows{border-top:1px solid var(--bdr);max-height:calc(100vh - 260px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-y}
 .slrows::-webkit-scrollbar{display:none}
 .slrows-lt{border-top-color:var(--bdl)}
 .scroll-hint{text-align:center;padding:.5rem 0;font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:rgba(232,229,223,.18);animation:blink 2s ease-in-out infinite}
@@ -852,7 +920,7 @@ blockquote{border-left:2px solid var(--acc);padding:.35rem .8rem;font-style:ital
 .cfbtn:disabled{opacity:.5}
 .cfbtn i{font-size:.7rem;transition:transform .3s}
 .cfbtn:hover:not(:disabled) i{transform:translateX(4px)}
-.ctfoot{margin-top:2.5rem;padding-top:1.2rem;border-top:1px solid var(--bdr);display:flex;justify-content:space-between;font-size:.6rem;color:rgba(232,229,223,.16);letter-spacing:.8px;flex-wrap:wrap;gap:.5rem}
+.ctfoot{margin-top:2.5rem;padding-top:1.2rem;border-top:1px solid var(--bdr);display:flex;justify-content:center;font-size:.6rem;color:rgba(232,229,223,.16);letter-spacing:.8px}
 
 .overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.92);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:0}
 .mbox-full{position:relative;width:100%;height:100%;display:flex;overflow:hidden}
@@ -897,15 +965,24 @@ blockquote{border-left:2px solid var(--acc);padding:.35rem .8rem;font-style:ital
 .mfade-enter-active,.mfade-leave-active{transition:opacity .22s}
 .mfade-enter-from,.mfade-leave-to{opacity:0}
 
-.toast{position:fixed;top:1.5rem;left:50%;transform:translateX(-50%);z-index:9999;background:#1b1b1b;border:1px solid var(--bdr);border-radius:10px;padding:.82rem 1.4rem;display:flex;align-items:flex-start;gap:.65rem;min-width:240px;max-width:360px;box-shadow:0 10px 40px rgba(0,0,0,.6);animation:toastDrop .3s cubic-bezier(.16,1,.3,1)}
-@keyframes toastDrop{from{opacity:0;transform:translateX(-50%) translateY(-12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.toast.ok{border-left:3px solid var(--acc)}
-.toast.err{border-left:3px solid #e55}
-.toast i:first-child{font-size:.95rem;margin-top:2px}
-.toast.ok i:first-child{color:var(--acc)}
-.toast.err i:first-child{color:#e55}
-.toast strong{font-size:.8rem;display:block;margin-bottom:.1rem}
-.toast p{font-size:.7rem;color:var(--txd);margin:0}
-.toast-enter-active,.toast-leave-active{transition:all .3s}
-.toast-enter-from,.toast-leave-to{opacity:0;transform:translateX(-50%) translateY(-12px)}
+.notif-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.notif-card{background:rgba(20,20,20,.92);border:1px solid rgba(232,229,223,.12);border-radius:20px;padding:2.2rem 2rem;max-width:380px;width:100%;display:flex;flex-direction:column;align-items:center;gap:1.4rem;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.notif-close{position:absolute;top:.9rem;right:.9rem;width:32px;height:32px;background:rgba(232,229,223,.07);border:1px solid rgba(232,229,223,.12);border-radius:50%;color:rgba(232,229,223,.5);font-size:.72rem;cursor:none;display:flex;align-items:center;justify-content:center;transition:all .25s}
+@media(pointer:coarse){.notif-close{cursor:pointer}}
+.notif-close:hover{background:var(--acc);border-color:var(--acc);color:#fff;transform:rotate(90deg)}
+.notif-icon{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(40,157,242,.1);border:3px solid var(--acc);position:relative;flex-shrink:0}
+.notif-icon::before{content:'';position:absolute;width:100%;height:100%;border-radius:50%;border:3px solid var(--acc);animation:notifPulse 1.6s ease-out infinite}
+@keyframes notifPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.55);opacity:0}}
+.notif-icon i{font-size:2rem;color:var(--acc)}
+.notif-icon.error{background:rgba(255,77,77,.1);border-color:#ff4d4d}
+.notif-icon.error::before{border-color:#ff4d4d}
+.notif-icon.error i{color:#ff4d4d}
+.notif-msg{text-align:center}
+.notif-msg h4{font-size:1.3rem;font-weight:700;color:var(--tx);margin-bottom:.4rem;font-family:var(--san)}
+.notif-msg p{font-size:.85rem;color:var(--txd);line-height:1.65}
+.notif-fade-enter-active,.notif-fade-leave-active{transition:opacity .3s,transform .3s}
+.notif-fade-enter-from,.notif-fade-leave-to{opacity:0}
+.notif-fade-enter-from .notif-card,.notif-fade-leave-to .notif-card{transform:scale(.9)}
+.notif-fade-enter-to .notif-card,.notif-fade-leave-from .notif-card{transform:scale(1)}
+
 </style>
