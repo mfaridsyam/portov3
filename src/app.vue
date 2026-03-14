@@ -31,7 +31,6 @@
       </button>
     </nav>
 
-    <!-- Mobile only arrow navigation -->
     <div class="mob-nav">
       <button class="mob-nav-btn" @click="prev" :disabled="cur_sec===0" :class="{disabled: cur_sec===0}">
         <i class="fas fa-chevron-up"></i>
@@ -77,7 +76,6 @@
           </div>
         </div>
 
-        <!-- Photo section: mobile only between intro and about -->
         <div v-show="cur_sec===2" key="photo" class="fp-slide bg-dk">
           <div class="sec-photo">
             <div class="ph-img-wrap">
@@ -374,7 +372,6 @@ function startLoad() {
 
 function goTo(idx) {
   if (going.value || idx === cur_sec.value) return
-  // Skip photo section (idx=2) on desktop (non-touch)
   const isDesktop = window.matchMedia('(pointer:fine)').matches
   if (isDesktop && idx === 2) {
     idx = idx > cur_sec.value ? 3 : 1
@@ -416,7 +413,6 @@ function onWheel(e) {
     if (e.deltaY > 0 && !atBot) { el.scrollTop += e.deltaY * 0.8; return }
     if (e.deltaY < 0 && !atTop) { el.scrollTop += e.deltaY * 0.8; return }
   }
-  // Handle summary section internal scroll
   const summaryEl = cur_sec.value === 7 ? document.querySelector(".sec-summary") : null
   if (summaryEl) {
     const atTop = summaryEl.scrollTop <= 2
@@ -433,16 +429,13 @@ function onWheel(e) {
   }
 }
 
-// Touch: require 2 swipes on ALL sections on mobile to navigate
 let touchY0 = 0, touchX0 = 0, touchSwipeCount = 0, lastSwipeSec = -1
 let touchInList = false
 
 function onTouchStart(e) {
   touchY0 = e.touches[0].clientY
   touchX0 = e.touches[0].clientX
-  // Check if touch started inside a scrollable list
   touchInList = !!e.target.closest('.slrows')
-  // Try to play music on first user touch (mobile autoplay policy)
   if (!musicPlayed) { musicPlayed = true; tryPlay() }
 }
 
@@ -452,7 +445,6 @@ function onTouchEnd(e) {
   const dy = touchY0 - e.changedTouches[0].clientY
   const dx = Math.abs(touchX0 - e.changedTouches[0].clientX)
 
-  // If touch started inside list, never navigate — list handles its own scroll
   if (touchInList) { touchInList = false; return }
 
   if (dx > Math.abs(dy) || Math.abs(dy) < 40) return
@@ -465,7 +457,6 @@ function onTouchEnd(e) {
     if (dy < 0 && !atTop) return
   }
 
-  // Summary section: check internal scroll
   const summaryEl = cur_sec.value === 7 ? document.querySelector(".sec-summary") : null
   if (summaryEl) {
     const atTop = summaryEl.scrollTop <= 2
@@ -474,7 +465,6 @@ function onTouchEnd(e) {
     if (dy < 0 && !atTop) return
   }
 
-  // About section mobile: check internal scroll
   const aboutEl = cur_sec.value === 3 ? document.querySelector('.ab-body') : null
   if (aboutEl) {
     const atTop = aboutEl.scrollTop <= 2
@@ -483,7 +473,6 @@ function onTouchEnd(e) {
     if (dy < 0 && !atTop) return
   }
 
-  // Double-swipe required on ALL sections (mobile only)
   if (lastSwipeSec === cur_sec.value) {
     touchSwipeCount++
   } else {
@@ -594,7 +583,6 @@ onMounted(() => {
   const vp = vpRef.value
   if (vp) vp.addEventListener('wheel', onWheel, {passive:false})
   document.addEventListener('wheel', onWheel, {passive:false})
-  // Disable pinch zoom on mobile
   document.addEventListener('gesturestart', e => e.preventDefault(), {passive:false})
   document.addEventListener('gesturechange', e => e.preventDefault(), {passive:false})
   document.addEventListener('gestureend', e => e.preventDefault(), {passive:false})
@@ -642,7 +630,6 @@ body{cursor:none}
 .glitch-text{position:relative;display:inline-block}
 .glitch-text::before,.glitch-text::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}
 
-/* ld-name: clean glitch, starts immediately, repeats every 2.5s */
 .ld-name.glitch-text::before{color:#289DF2;animation:ldGlitchA 2.5s infinite;clip-path:polygon(0 10%,100% 10%,100% 38%,0 38%)}
 .ld-name.glitch-text::after{color:#ff4d8d;animation:ldGlitchB 2.5s infinite;clip-path:polygon(0 58%,100% 58%,100% 82%,0 82%)}
 @keyframes ldGlitchA{
@@ -664,7 +651,6 @@ body{cursor:none}
   100%{opacity:0}
 }
 
-/* hlf/hls: periodic glitch every 4s */
 .hlf.glitch-text::before,.hls.glitch-text::before{color:#289DF2;animation:glitchA 4s infinite;clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%)}
 .hlf.glitch-text::after,.hls.glitch-text::after{color:#ff4d8d;animation:glitchB 4s infinite;clip-path:polygon(0 55%,100% 55%,100% 78%,0 78%)}
 @keyframes glitchA{
