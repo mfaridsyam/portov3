@@ -34,7 +34,7 @@ export const projects = [
   {
     title: "TraceLink",
     desc:  "A real-time location sharing PWA with live GPS tracking, room-based groups, and Firebase sync — built for anyone to share their whereabouts instantly.",
-    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1772294839/tracelink_valcit.png",
+    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1776076948/tracelink_afxdej.png",
     badges: ["UI/UX Design", "Web Development"],
     role:   "UI/UX Designer & Web Developer",
     images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046221/comingsoon_ol3ycq.png"]
@@ -50,7 +50,7 @@ export const projects = [
   {
     title: "IGSave",
     desc:  "A web tool to download Instagram Reels, feed posts, carousel photos, and Stories — all without watermark, straight from the browser.",
-    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1773052015/igsave_fr1sty.png",
+    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1776076571/igsave_qkovga.png",
     badges: ["UI/UX Design", "Web Development"],
     role:   "UI/UX Designer & Web Developer",
     images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046221/comingsoon_ol3ycq.png"]
@@ -58,7 +58,7 @@ export const projects = [
   {
     title: "TikSave",
     desc:  "A web tool to download TikTok videos without watermark — fast, free, and works directly in the browser with no app required.",
-    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1773052015/tiksave_mu47xv.png",
+    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1776076571/tiksave_fh1h6g.png",
     badges: ["UI/UX Design", "Web Development"],
     role:   "UI/UX Designer & Web Developer",
     images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046221/comingsoon_ol3ycq.png"]
