@@ -34,7 +34,7 @@ export const projects = [
   {
     title: "TraceLink",
     desc:  "A real-time location sharing PWA with live GPS tracking, room-based groups, and Firebase sync — built for anyone to share their whereabouts instantly.",
-    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1776076948/tracelink_afxdej.png",
+    image: "https://res.cloudinary.com/dnacoymkh/image/upload/v1776077205/tracelink_zhjvju.png",
     badges: ["UI/UX Design", "Web Development"],
     role:   "UI/UX Designer & Web Developer",
     images: ["https://res.cloudinary.com/dnacoymkh/image/upload/v1772046221/comingsoon_ol3ycq.png"]
